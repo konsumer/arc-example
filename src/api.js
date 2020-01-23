@@ -42,7 +42,7 @@ export class Api {
 
   // Find all employees in specific Warehouse
   // Use GSI-1, PKR="wareHouseId"
-  employeesByWarehouse (wareHouseId) {}
+  employeesByWarehouse (warehouseId) {}
 
   // Get all Orderitems for a Product including warehouse location inventories
   // Use GSI1-PKR="productId"
