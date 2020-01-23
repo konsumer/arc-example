@@ -5,7 +5,8 @@
   "scripts": {
     "start": "arc sandbox",
     "deploy": "arc deploy",
-    "init": "arc init"
+    "init": "arc init",
+    "test": "echo 'NO UNIT-TESTS, YET'"
   },
   "keywords": [],
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",

@@ -184,6 +184,9 @@ npm start
 
 # deploy on AWS
 npm run deploy
+
+# run unit-tests
+npm test
 ```
 
 Another bonus of this, is that the `arc` command is already in the user's path, because it's set as a dev-dependency, so no other installation needed (aside from `npm i`.)
