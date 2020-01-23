@@ -13,5 +13,10 @@
   "license": "MIT",
   "devDependencies": {
     "@architect/architect": "^6.1.4"
+  },
+  "dependencies": {
+    "@architect/functions": "^3.4.14",
+    "graphql": "^14.5.8",
+    "graphql-tools": "^4.0.6"
   }
 }

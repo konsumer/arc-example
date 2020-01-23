@@ -75,22 +75,22 @@ If the access pattern requires a high velocity query on this global secondary in
 
 Finally, you can revisit the access patterns that were defined earlier. Following is the list of access patterns and the query conditions that you will use with the new DynamoDB version of the application to accommodate them:
 
-| Access Patterns                                                           | Query Conditions                                                            |
-| ------------------------------------------------------------------------- |:---------------------------------------------------------------------------:|
-| Look up Employee Details by Employee ID                                   | Primary Key on table, ID="HR-EMPLOYEE1"                                     |
-| Query Employee Details by Employee Name                                   | Use GSI-1, PK="Employee Name"                                               |
-| Get an employee's current job details only                                | Primary Key on table, PK="HR-EMPLOYEE1", SK starts-with "vo"                |
-| Get Orders for a customer for a date range                                | Use GSI-1, PK=CUSTOMERI1, SK="STATUS-DATE", for each StatusCode             |
-| Show all Orders in OPEN status for a date range across all customers      | Use GSI-2, PK=query in parallel for the range [0..N], SK between OPEN-Datel |
-| All Employees Hired recently                                              | Use GSI-1, PK="HR-CONFIDENTIAL", SK > datel                                 |
-| Find all employees in specific Warehouse                                  | Use GSI-1, PKR=WAREHOUSE1                                                   |
-| Get all Orderitems for a Product including warehouse location inventories | Use GSI-1, PKR=PRODUCT1                                                     |
-| Get customers by Account Rep                                              | Use GSI-1, PKR=ACCOUNT-REP                                                  |
-| Get orders by Account Rep and date                                        | Use GSI-1, PK=ACCOUNT-REP, SK="STATUS-DATE", for each StatusCode            |
-| Get all employees with specific Job Title                                 | Use GSI-1, PK=v0O-JOBTITLE                                                  |
-| Get inventory by Product and Warehouse                                    | Primary Key on table, PK=OE-PRODUCT1, SK=PRODUCT1                           |
-| Get total product inventory                                               | Primary Key on table, PK=OE-PRODUCT1, SK=PRODUCT1                           |
-| Get Account Reps ranked by Order Total and Sales Period                   | Use GSI-1, PK=YYYY-Q1, scanindexForward=False                               |
+| Access Patterns                                                            | Query Conditions                                                            |
+| -------------------------------------------------------------------------- |:---------------------------------------------------------------------------:|
+| Look up Employee Details by Employee ID                                    | Primary Key on table, ID="HR-EMPLOYEE1"                                     |
+| Query Employee Details by Employee Name                                    | Use GSI-1, PK="Employee Name"                                               |
+| Get an employee's current job details only                                 | Primary Key on table, PK="HR-EMPLOYEE1", SK starts-with "vo"                |
+| Get Orders for a customer for a date range                                 | Use GSI-1, PK=CUSTOMERI1, SK="STATUS-DATE", for each StatusCode             |
+| Show all Orders in OPEN status for a date range across all customers       | Use GSI-2, PK=query in parallel for the range [0..N], SK between OPEN-Datel |
+| All Employees Hired recently                                               | Use GSI-1, PK="HR-CONFIDENTIAL", SK > datel                                 |
+| Find all employees in specific Warehouse                                   | Use GSI-1, PKR=WAREHOUSE1                                                   |
+| Get all Order items for a Product including warehouse location inventories | Use GSI-1, PKR=PRODUCT1                                                     |
+| Get customers by Account Rep                                               | Use GSI-1, PKR=ACCOUNT-REP                                                  |
+| Get orders by Account Rep and date                                         | Use GSI-1, PK=ACCOUNT-REP, SK="STATUS-DATE", for each StatusCode            |
+| Get all employees with specific Job Title                                  | Use GSI-1, PK=v0O-JOBTITLE                                                  |
+| Get inventory by Product and Warehouse                                     | Primary Key on table, PK=OE-PRODUCT1, SK=PRODUCT1                           |
+| Get total product inventory                                                | Primary Key on table, PK=OE-PRODUCT1, SK=PRODUCT1                           |
+| Get Account Reps ranked by Order Total and Sales Period                    | Use GSI-1, PK=YYYY-Q1, scanindexForward=False                               |
 
 > Normally, you should probably do this as a first step. It's much easier to map access patterns to schema, rather than the other way around. Even though DynamoDB is "schemaless" once you have an access strategy for your keys, it's much harder to make a change to how it works, so it really pays to work out all these details up-front. If you know that you will always have a certain number of arguments for all your access patterns, you can work out how many GSI you will need, even if you aren't sure what the schema of the records will be. Following this pattern will help you scale really wall and stay flexible, since you only need to add more GSI if you run out of keys to handle your arguments.
 

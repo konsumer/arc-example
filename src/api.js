@@ -1,6 +1,11 @@
-import arc from '@architect/functions'
+const arc = require('@architect/functions')
 
-export class Api {
+// This describes the API
+// Since I want a fairly close-mapping with the AWS example I focused on that
+// But in a real app, you might want to make it more closely match your graphql SDL (just lookups and joins and whatever else is left for)
+// You could also put this stuff directly in your graphql resolvers.
+
+class Api {
   // async function to get table lib
   table () {
     return arc.tables()
@@ -72,7 +77,9 @@ export class Api {
   // Use GSI1-PK=quarter, scanindexForward=False
   getRepsByPeriod (quarter) {}
 
+  // TODO: here I add any remaining methods needed to support type-joins in graphql
+
   // TODO: these are generic CRUD methods for all our models
 }
 
-export default Api
+exports.Api = Api
