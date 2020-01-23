@@ -1,0 +1,16 @@
+{
+  "name": "arc-example",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "arc sandbox",
+    "deploy": "arc deploy",
+    "init": "arc init"
+  },
+  "keywords": [],
+  "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
+  "license": "MIT",
+  "devDependencies": {
+    "@architect/architect": "^6.1.4"
+  }
+}
