@@ -11,7 +11,7 @@ export class Api {
   // Table-PK="EmployeeId"
   async employeeDetailsById (employeeId) {
     const t = await this.table()
-    t.query({
+    return t.query({
       key_condition_expression: 'pk = :employeeId',
       expression_attribute_values: {
         ':employeeId': { S: employeeId }
