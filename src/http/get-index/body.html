@@ -1,0 +1,130 @@
+<title>Example of Modeling Relational Data in DynamoDB</title>
+
+<h1>Example of Modeling Relational Data in DynamoDB</h1>
+<p>This is a really simplistic example frontend to show off the API we setup.</p>
+
+<h2>employeeDetailsById</h2>
+<form method="POST"><input type="hidden" call="employeeDetailsById" />
+<label for="employeeId">employeeId</label>
+<input type="text" name="employeeId" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>employeeDetailsByName</h2>
+<form method="POST"><input type="hidden" call="employeeDetailsByName" />
+<label for="employeeName">employeeName</label>
+<input type="text" name="employeeName" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>employeeCurrentDetailsById</h2>
+<form method="POST"><input type="hidden" call="employeeCurrentDetailsById" />
+<label for="employeeId">employeeId</label>
+<input type="text" name="employeeId" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>ordersByCustomerAndDate</h2>
+<form method="POST"><input type="hidden" call="ordersByCustomerAndDate" />
+<label for="customerId">customerId</label>
+<input type="text" name="customerId" />
+<label for="start">start</label>
+<input type="date" name="start" />
+<label for="end">end</label>
+<input type="date" name="end" />
+<label for="status">status</label>
+<select name="status">
+  <option>OPEN</option>
+  <option>PENDING</option>
+  <option>CLOSED</option>
+</select>
+<button type="submit">RUN</button>
+</form>
+
+<h2>ordersByDate</h2>
+<form method="POST"><input type="hidden" call="ordersByDate" />
+<label for="start">start</label>
+<input type="date" name="start" />
+<label for="end">end</label>
+<input type="date" name="end" />
+<label for="status">status</label>
+<select name="status">
+  <option>OPEN</option>
+  <option>PENDING</option>
+  <option>CLOSED</option>
+</select>
+<button type="submit">RUN</button>
+</form>
+
+<h2>employeeRecentHires</h2>
+<form method="POST"><input type="hidden" call="employeeRecentHires" />
+<label for="since">since</label>
+<input type="date" name="since" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>employeesByWarehouse</h2>
+<form method="POST"><input type="hidden" call="employeesByWarehouse" />
+<label for="warehouseId">warehouseId</label>
+<input type="text" name="warehouseId" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>ordersByProduct</h2>
+<form method="POST"><input type="hidden" call="ordersByProduct" />
+<label for="productId">productId</label>
+<input type="text" name="productId" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>customersByRep</h2>
+<form method="POST"><input type="hidden" call="customersByRep" />
+<label for="repId">repId</label>
+<input type="text" name="repId" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>ordersByRepAndDate</h2>
+<form method="POST"><input type="hidden" call="ordersByRepAndDate" />
+<label for="repId">repId</label>
+<input type="text" name="repId" />
+<label for="date">date</label>
+<input type="date" name="date" />
+<label for="status">status</label>
+<select name="status">
+  <option>OPEN</option>
+  <option>PENDING</option>
+  <option>CLOSED</option>
+</select>
+<button type="submit">RUN</button>
+</form>
+
+<h2>employeesByJobTitle</h2>
+<form method="POST"><input type="hidden" call="employeesByJobTitle" />
+<label for="jobTitle">jobTitle</label>
+<input type="text" name="jobTitle" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>inventoryByProductAndWarehouse</h2>
+<form method="POST"><input type="hidden" call="inventoryByProductAndWarehouse" />
+<label for="productId">productId</label>
+<input type="text" name="productId" />
+<label for="warehouseId">warehouseId</label>
+<input type="text" name="warehouseId" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>inventoryByProduct</h2>
+<form method="POST"><input type="hidden" call="inventoryByProduct" />
+<label for="productId">productId</label>
+<input type="text" name="productId" />
+<button type="submit">RUN</button>
+</form>
+
+<h2>getRepsByPeriod</h2>
+<form method="POST"><input type="hidden" call="getRepsByPeriod" />
+<label for="quarter">quarter</label>
+<input type="text" name="quarter" />
+<button type="submit">RUN</button>
+</form>

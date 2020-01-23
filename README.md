@@ -126,35 +126,33 @@ It will make your life easier if you create a central file that maps all your ac
 
 Have a look at [this file](src/api.js) to see how I have mapped these to a dynamo client.
 
-Additionally, I added some basic create/update/delete methods for `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Warehouses`, so we can full manage our data.
+Additionally, in your app you will priobably need some basic LCRUD (List, Create, Read, Update, Delete) methods for `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Warehouses`, so we can fully manage our data. I left these out.
 
 
-### make a service
+### make a service & frontend
 
-I want to expose all of this as a [GraphQL](https://graphql.org/) service. This will make it easy to explore your data, and shows a typical use-case that you might have for serving things to your frontend.
+At this point, you will often setup a REST or GraphQL service or other data-server layer (for your frontend.)  In a real app, you'd want to tune your data-access patterns to how you're going to serve up the data. For example, with REST, it's all about LCRUD for base-types, with RPCs for actions. For a GraphQL server, you'd focus more on LCRUD for base-types, then type-joins with params to link records. With gRPC, you'll be focused more on just the RPCs needed to actually get the data you need. In in all 3 cases, the way you craft your keys should be optimized to keep all the similar data togeter, require as few roundtrips as possible, and efficiently pull just the useful stuff for what you are trying to do.
 
-Add a HTTP service definition to your arc file to make graphql work:
+I just whipped up a simple set of forms and post-handlers to quickly expose [the API](src/api.js) to the web, so we can explore it. I wanted to keep this article focused on the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html) and keep things as simple as possible. 
 
 **[.arc](.arc)**:
 ```
 @http
-get /graphql
-post /graphql
+get /
+post /
 ```
 
-`get /graphql` is for the playground, and `post /graphql` is the query-endpoint.
+I just put all the forms in `get /` and the handlers in `post /`. After adding this to [.arc](.arc), you can run `arc init` to create stubs for these in `src/http/`.
 
-Have a look in [http dir](src/http) for how I did this. You can modify your [.arc](.arc) and run `npx @architect/architect init` to generate nice stub files for everything that's defined.
+**TODO**: Make tutorials like this for GraphQL/REST server, with data & api more tuned to it's structure.
 
-You could skip right to this step and just define [all your api functions](src/api.js) directly in your GraphQL resolvers, but I am keeping it separate here, so it's easier to follow, and can be dropped into a non-graphql project. I also like putting it in another file for separating concerns and making it all more unit-testable.
-
-Additionally, in a real system you'd want to use an authentication system (token or cookie-based) on your services, so no unauthorized people can get your super-secret HR/OE data.
 
 ### test it out
 
 * Run `npm i` to install your tools & dependencies
 * Run `npm start` to run a local development-server
-* Open [GraphQL Playground](http://localhost:3333/graphql) to explore your data
+* Run `npm setup` in another terminal to setup your demo-data
+* Open [the demo forms](http://localhost:3333) to explore your data
 
 ## finishing up
 

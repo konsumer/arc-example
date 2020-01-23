@@ -1,12 +1,13 @@
 {
-  "name": "arc-example",
+  "name": "arc-hroe-example",
   "private": true,
   "version": "0.0.0",
   "scripts": {
     "start": "arc sandbox",
     "deploy": "arc deploy",
     "init": "arc init",
-    "test": "echo 'NO UNIT-TESTS, YET'"
+    "test": "echo 'NO UNIT-TESTS, YET'",
+    "setup": "node src/setup.js"
   },
   "keywords": [],
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
@@ -15,8 +16,6 @@
     "@architect/architect": "^6.1.4"
   },
   "dependencies": {
-    "@architect/functions": "^3.4.14",
-    "graphql": "^14.5.8",
-    "graphql-tools": "^4.0.6"
+    "@architect/functions": "^3.4.14"
   }
 }

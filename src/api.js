@@ -76,10 +76,6 @@ class Api {
   // Get Account Reps ranked by Order Total and Sales Period
   // Use GSI1-PK=quarter, scanindexForward=False
   getRepsByPeriod (quarter) {}
-
-  // TODO: here I add any remaining methods needed to support type-joins in graphql
-
-  // TODO: these are generic CRUD methods for all our models
 }
 
 exports.Api = Api

@@ -1,10 +1,8 @@
-// just serve playground.html static file
-
-// TODO: add cache headers
+// learn more about HTTP functions here: https://arc.codes/primitives/http
 
 const { readFileSync } = require('fs')
 
-const body = readFileSync(`${__dirname}/playground.html`).toString()
+const body = readFileSync(`${__dirname}/body.html`).toString()
 
 exports.handler = async function http (req) {
   return {

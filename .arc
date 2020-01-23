@@ -1,9 +1,9 @@
 @app
-DynamoExample
+arc-hroe-example
 
 @http
-get /graphql
-post /graphql
+get /
+post /
 
 @tables
 hroe
