@@ -144,7 +144,7 @@ post /graphql
 
 Have a look in [http dir](src/http) for how I did this. You can modify your [.arc](.arc) and run `npx @architect/architect init` to generate nice stub files for everything that's defined.
 
-You could skip right to this step and just define [all your api functions](src/api.js) directly in your GraphQL resolvers, but I am keeping it separate here, so it's easier to follow, and can be dropped into a non-graphql project.
+You could skip right to this step and just define [all your api functions](src/api.js) directly in your GraphQL resolvers, but I am keeping it separate here, so it's easier to follow, and can be dropped into a non-graphql project. I also like putting it in another file for separating concerns and making it all more unit-testable.
 
 Additionally, in a real system you'd want to use an authentication system (token or cookie-based) on your services, so no unauthorized people can get your super-secret HR/OE data.
 

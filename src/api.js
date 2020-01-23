@@ -1,11 +1,23 @@
-export class Api {
-  init (table) {
-    this.table = table
+const arc = require('@architect/functions')
+
+class Api {
+  // async function to get table lib
+  table () {
+    return arc.tables()
+      .then(t => t.hroe)
   }
 
   // Look up Employee Details by Employee ID
   // Table-PK="EmployeeId"
-  employeeDetailsById (employeeId) {}
+  async employeeDetailsById (employeeId) {
+    const t = await this.table()
+    t.query({
+      key_condition_expression: 'pk = :employeeId',
+      expression_attribute_values: {
+        ':employeeId': { S: employeeId }
+      }
+    })
+  }
 
   // Query Employee Details by Employee Name
   // GSI1-PK="EmployeeName"
@@ -63,4 +75,4 @@ export class Api {
   // TODO: these are generic CRUD methods for all our models
 }
 
-export default Api
+module.exports = Api
