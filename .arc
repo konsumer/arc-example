@@ -1,6 +1,10 @@
 @app
 DynamoExample
 
+@http
+get /graphql
+post /graphql
+
 @tables
 hroe
   pk *String
@@ -8,10 +12,8 @@ hroe
 
 @indexes
 hroe
-  gsi1 *String
+  gsi1-pk *String
+  gsi1-sk **String
 hroe
-  gsi2 *String
-
-@http
-get /graphql
-post /graphql
+  gsi2-pk *String
+  gsi2-sk **String

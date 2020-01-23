@@ -110,17 +110,19 @@ hroe
 
 @indexes
 hroe
-  gsi1 *String
+  gsi1-pk *String
+  gsi1-sk **String
 hroe
-  gsi2 *String
+  gsi2-pk *String
+  gsi2-sk **String
 
 ```
 
-As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* called `pk` and *SK* called `sk`. We also make 2 GSIs, one with *PK* called `gsi1` and another with a *PK* called `gsi2`. We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table.
+As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* called `pk` and *SK* called `sk`. We also make 2 GSIs, with their PKs & SKs named (equally unimaginatively.) We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table.
 
 ### make an api
 
-It will make your life easier if you create a central file that maps all your access patterns to dynamo, so you don't have to worry about it's details while you are working on your app. You can even use this to centralize your single source of truth about how everything maps together (like the table above describes.)
+It will make your life easier if you create a central file that maps all your access patterns to dynamo, so you don't have to worry about it's implementation details while you are working on your app. You can even use this to centralize your single source of truth about how everything maps together (like the table above describes.)
 
 Have a look at [this file](src/api.js) to see how I have mapped these to a dynamo client. I also added a some methods to CRUD `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Wharehouses`.
 
@@ -137,10 +139,16 @@ get /graphql
 post /graphql
 ```
 
-Have a look in [http](src/http) for how I did this. You can modify your [.arc](.arc) and run `npx @architect/architect init` to generate nice stub files for everything that's defined.
+Have a look in [http dir](src/http) for how I did this. You can modify your [.arc](.arc) and run `npx @architect/architect init` to generate nice stub files for everything that's defined.
 
-You could skip right to this step and just define [all your api functions](src/api.js) directly in your GraphQL resolvers, but I am keeping it seperate here, so it's easier to follow, and can be dropped into a non-graphql project.
+You could skip right to this step and just define [all your api functions](src/api.js) directly in your GraphQL resolvers, but I am keeping it separate here, so it's easier to follow, and can be dropped into a non-graphql project.
 
+
+### test it out
+
+* Run `npm i` to install your tools & dependencies
+* Run `npm start` to run a local development-server
+* Open [GraphQL Playground](http://localhost:3333/graphql) to explore your data
 
 ## finishing up
 
@@ -152,6 +160,10 @@ arc sandbox
 
 # deploy your app on AWS
 arc deploy
+
+# live interact with your schema
+# try typing data.<TAB>
+arc repl
 ```
 
 I like to put these commands in [package.json](package.json) `script` definitions, so other devs (who may be less familiar with arc) can quickly do stuff with the project, and it also helps remind me, if I get rusty with arc-commands:
