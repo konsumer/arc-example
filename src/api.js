@@ -1,6 +1,6 @@
-const arc = require('@architect/functions')
+import arc from '@architect/functions'
 
-class Api {
+export class Api {
   // async function to get table lib
   table () {
     return arc.tables()
@@ -75,4 +75,4 @@ class Api {
   // TODO: these are generic CRUD methods for all our models
 }
 
-module.exports = Api
+export default Api
