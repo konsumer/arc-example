@@ -154,7 +154,7 @@ arc sandbox
 arc deploy
 ```
 
-I like to put these commands in (package.json)[package.json] `script` definitions, so other devs (who may be less familiar with arc) can quickly do stuff with the project, and it also helps remind me, if I get rusty with arc-commands:
+I like to put these commands in [package.json](package.json) `script` definitions, so other devs (who may be less familiar with arc) can quickly do stuff with the project, and it also helps remind me, if I get rusty with arc-commands:
 
 ```
 # install tools & dependencies
