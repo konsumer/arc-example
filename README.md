@@ -142,6 +142,8 @@ get /graphql
 post /graphql
 ```
 
+`get /graphql` is for the playground, and `post /graphql` is the query-endpoint.
+
 Have a look in [http dir](src/http) for how I did this. You can modify your [.arc](.arc) and run `npx @architect/architect init` to generate nice stub files for everything that's defined.
 
 You could skip right to this step and just define [all your api functions](src/api.js) directly in your GraphQL resolvers, but I am keeping it separate here, so it's easier to follow, and can be dropped into a non-graphql project. I also like putting it in another file for separating concerns and making it all more unit-testable.
@@ -189,4 +191,4 @@ npm run deploy
 npm test
 ```
 
-Another bonus of this, is that the `arc` command is already in the user's path, because it's setup in `devDependencies`, so no other installation needed (aside from `npm i`.)
+Another bonus of this, is that the `arc` command is already in the user's path, because it's setup in `devDependencies`, so no other installation is needed (aside from `npm i`.)
