@@ -1,6 +1,6 @@
 # Example of Modeling Relational Data in DynamoDB
 
-> This is based on the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html). In this tutorial, I will explain the data structure we start with, and how to map that from their example to [arc](https://arc.codes) using best practices and get the most efficiency out of DynamoDB.
+> This is based on the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html). In this tutorial, I will explain the data structure we start with, and how to map that from their example to [arc](https://arc.codes) using best practices and get the most efficiency & scalability out of DynamoDB.
 
 ## how to design a DynamoDB model
 
@@ -79,7 +79,7 @@ Finally, you can revisit the access patterns that were defined earlier. Followin
 | ------------------------------------------------------------------------- |:---------------------------------------------------------------------------:|
 | Look up Employee Details by Employee ID                                   | Primary Key on table, ID="HR-EMPLOYEE1"                                     |
 | Query Employee Details by Employee Name                                   | Use GSI-1, PK="Employee Name"                                               |
-| Get an employee's current job details only                                | Primary Key on table, PK="HR-EMPLOYEE1", SK starts-with "vo"                 |
+| Get an employee's current job details only                                | Primary Key on table, PK="HR-EMPLOYEE1", SK starts-with "vo"                |
 | Get Orders for a customer for a date range                                | Use GSI-1, PK=CUSTOMERI1, SK="STATUS-DATE", for each StatusCode             |
 | Show all Orders in OPEN status for a date range across all customers      | Use GSI-2, PK=query in parallel for the range [0..N], SK between OPEN-Datel |
 | All Employees Hired recently                                              | Use GSI-1, PK="HR-CONFIDENTIAL", SK > datel                                 |
@@ -118,13 +118,16 @@ hroe
 
 ```
 
-As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* called `pk` and *SK* called `sk`. We also make 2 GSIs, with their PKs & SKs named (equally unimaginatively.) We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table.
+As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* called `pk` and *SK* called `sk`. We also make 2 GSIs, with their PKs & SKs (named equally unimaginatively.) We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table.
 
 ### make an api
 
 It will make your life easier if you create a central file that maps all your access patterns to dynamo, so you don't have to worry about it's implementation details while you are working on your app. You can even use this to centralize your single source of truth about how everything maps together (like the table above describes.)
 
-Have a look at [this file](src/api.js) to see how I have mapped these to a dynamo client. I also added a some methods to CRUD `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Wharehouses`.
+Have a look at [this file](src/api.js) to see how I have mapped these to a dynamo client.
+
+Additionally, I added some basic create/update/delete methods for `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Warehouses`, so we can full manage our data.
+
 
 ### make a service
 
@@ -143,6 +146,7 @@ Have a look in [http dir](src/http) for how I did this. You can modify your [.ar
 
 You could skip right to this step and just define [all your api functions](src/api.js) directly in your GraphQL resolvers, but I am keeping it separate here, so it's easier to follow, and can be dropped into a non-graphql project.
 
+Additionally, in a real system you'd want to use an authentication system (token or cookie-based) on your services, so no unauthorized people can get your super-secret HR/OE data.
 
 ### test it out
 
@@ -172,7 +176,7 @@ I like to put these commands in [package.json](package.json) `script` definition
 # install tools & dependencies
 npm i
 
-# generate whatever is defined in .arc
+# generate stubs for whatever is defined in .arc, in src/
 npm run init
 
 # start a local dev-server
@@ -181,3 +185,5 @@ npm start
 # deploy on AWS
 npm run deploy
 ```
+
+Another bonus of this, is that the `arc` command is already in the user's path, because it's set as a dev-dependency, so no other installation needed (aside from `npm i`.)
