@@ -7,13 +7,13 @@ post /
 
 @tables
 hroe
-  pk *String
-  sk: **String
+  p *String
+  s **String
 
 @indexes
 hroe
-  gsi1-pk *String
-  gsi1-sk **String
+  ap *String
+  as **String
 hroe
-  gsi2-pk *String
-  gsi2-sk **String
+  bp *String
+  bs **String

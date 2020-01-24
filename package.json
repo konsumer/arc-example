@@ -13,7 +13,7 @@
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
   "license": "MIT",
   "devDependencies": {
-    "@architect/architect": "^6.1.4"
+    "@architect/architect": "^6.1.5"
   },
   "dependencies": {
     "@architect/functions": "^3.4.14"

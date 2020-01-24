@@ -71,6 +71,8 @@ In this example, the items are randomly distributed across the 15 logical partit
 
 If the access pattern requires a high velocity query on this global secondary index that returns a sparse result set, it's probably better to use a hash algorithm to distribute the items rather than a random pattern. In this case, you might select an attribute that is known when the query is executed at run time and hash that attribute into a 0–14 key space when the items are inserted. Then they can be efficiently read from the global secondary index.
 
+> You can have a look at [data.json](src/data.json) if you want to see how all this fits together (JSON might be easier to read than all these tables.)
+
 ## implementation
 
 Finally, you can revisit the access patterns that were defined earlier. Following is the list of access patterns and the query conditions that you will use with the new DynamoDB version of the application to accommodate them:
@@ -105,20 +107,20 @@ DynamoExample
 
 @tables
 hroe
-  pk *String
-  sk: **String
+  p *String
+  s **String
 
 @indexes
 hroe
-  gsi1-pk *String
-  gsi1-sk **String
+  ap *String
+  as **String
 hroe
-  gsi2-pk *String
-  gsi2-sk **String
+  bp *String
+  bs **String
 
 ```
 
-As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* called `pk` and *SK* called `sk`. We also make 2 GSIs, with their PKs & SKs (named equally unimaginatively.) We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table.
+As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* called `p` and *SK* called `s`. We also make 2 GSIs, with their PKs & SKs (named equally unimaginatively.) We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table. I'm not using dashes in any of the actual field-names, because it will confuse dynamo when we make queries.
 
 ### make an api
 
@@ -144,7 +146,7 @@ post /
 
 I just put all the forms in `get /` and the handlers in `post /`. After adding this to [.arc](.arc), you can run `arc init` to create stubs for these in `src/http/`.
 
-**TODO**: Make tutorials like this for GraphQL/REST server, with data & api more tuned to it's structure.
+**TODO**: Make tutorials like this for GraphQL/REST server, with same models & data, but different access patterns and key-structure, tuned to target.
 
 
 ### test it out

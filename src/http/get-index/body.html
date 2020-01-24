@@ -2,36 +2,37 @@
 
 <h1>Example of Modeling Relational Data in DynamoDB</h1>
 <p>This is a really simplistic example frontend to show off the API we setup.</p>
+<p>They are pre-filled with example-values that should return records.</p>
 
 <h2>employeeDetailsById</h2>
-<form method="POST"><input type="hidden" call="employeeDetailsById" />
+<form method="POST"><input type="hidden" name="call" value="employeeDetailsById" />
 <label for="employeeId">employeeId</label>
-<input type="text" name="employeeId" />
+<input type="text" name="employeeId" value="EMPLOYEE1" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>employeeDetailsByName</h2>
-<form method="POST"><input type="hidden" call="employeeDetailsByName" />
+<form method="POST"><input type="hidden" name="call" value="employeeDetailsByName" />
 <label for="employeeName">employeeName</label>
-<input type="text" name="employeeName" />
+<input type="text" name="employeeName" value="John Smith" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>employeeCurrentDetailsById</h2>
-<form method="POST"><input type="hidden" call="employeeCurrentDetailsById" />
+<form method="POST"><input type="hidden" name="call" value="employeeCurrentDetailsById" />
 <label for="employeeId">employeeId</label>
-<input type="text" name="employeeId" />
+<input type="text" name="employeeId" value="EMPLOYEE1" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>ordersByCustomerAndDate</h2>
-<form method="POST"><input type="hidden" call="ordersByCustomerAndDate" />
+<form method="POST"><input type="hidden" name="call" value="ordersByCustomerAndDate" />
 <label for="customerId">customerId</label>
-<input type="text" name="customerId" />
+<input type="text" name="customerId" value="CUSTOMER1" />
 <label for="start">start</label>
-<input type="date" name="start" />
+<input type="date" name="start" value="1970-01-01" />
 <label for="end">end</label>
-<input type="date" name="end" />
+<input type="date" name="end" value="DATENOW" />
 <label for="status">status</label>
 <select name="status">
   <option>OPEN</option>
@@ -42,11 +43,11 @@
 </form>
 
 <h2>ordersByDate</h2>
-<form method="POST"><input type="hidden" call="ordersByDate" />
+<form method="POST"><input type="hidden" name="call" value="ordersByDate" />
 <label for="start">start</label>
-<input type="date" name="start" />
+<input type="date" name="start" value="1970-01-01" />
 <label for="end">end</label>
-<input type="date" name="end" />
+<input type="date" name="end" value="DATENOW" />
 <label for="status">status</label>
 <select name="status">
   <option>OPEN</option>
@@ -57,39 +58,39 @@
 </form>
 
 <h2>employeeRecentHires</h2>
-<form method="POST"><input type="hidden" call="employeeRecentHires" />
+<form method="POST"><input type="hidden" name="call" value="employeeRecentHires" />
 <label for="since">since</label>
-<input type="date" name="since" />
+<input type="date" name="since" value="1970-01-01" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>employeesByWarehouse</h2>
-<form method="POST"><input type="hidden" call="employeesByWarehouse" />
+<form method="POST"><input type="hidden" name="call" value="employeesByWarehouse" />
 <label for="warehouseId">warehouseId</label>
-<input type="text" name="warehouseId" />
+<input type="text" name="warehouseId" value="OE-WAREHOUSE1" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>ordersByProduct</h2>
-<form method="POST"><input type="hidden" call="ordersByProduct" />
+<form method="POST"><input type="hidden" name="call" value="ordersByProduct" />
 <label for="productId">productId</label>
-<input type="text" name="productId" />
+<input type="text" name="productId" value="OE-PRODUCT1" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>customersByRep</h2>
-<form method="POST"><input type="hidden" call="customersByRep" />
+<form method="POST"><input type="hidden" name="call" value="customersByRep" />
 <label for="repId">repId</label>
-<input type="text" name="repId" />
+<input type="text" name="repId" value="EMPLOYEE1" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>ordersByRepAndDate</h2>
-<form method="POST"><input type="hidden" call="ordersByRepAndDate" />
+<form method="POST"><input type="hidden" name="call" value="ordersByRepAndDate" />
 <label for="repId">repId</label>
-<input type="text" name="repId" />
+<input type="text" name="repId" value="EMPLOYEE1" />
 <label for="date">date</label>
-<input type="date" name="date" />
+<input type="date" name="date" value="2018-08-11" />
 <label for="status">status</label>
 <select name="status">
   <option>OPEN</option>
@@ -100,31 +101,31 @@
 </form>
 
 <h2>employeesByJobTitle</h2>
-<form method="POST"><input type="hidden" call="employeesByJobTitle" />
+<form method="POST"><input type="hidden" name="call" value="employeesByJobTitle" />
 <label for="jobTitle">jobTitle</label>
-<input type="text" name="jobTitle" />
+<input type="text" name="jobTitle" value="Account Manager" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>inventoryByProductAndWarehouse</h2>
-<form method="POST"><input type="hidden" call="inventoryByProductAndWarehouse" />
+<form method="POST"><input type="hidden" name="call" value="inventoryByProductAndWarehouse" />
 <label for="productId">productId</label>
-<input type="text" name="productId" />
+<input type="text" name="productId" value="OE-PRODUCT1" />
 <label for="warehouseId">warehouseId</label>
-<input type="text" name="warehouseId" />
+<input type="text" name="warehouseId" value="OE-WAREHOUSE1" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>inventoryByProduct</h2>
-<form method="POST"><input type="hidden" call="inventoryByProduct" />
+<form method="POST"><input type="hidden" name="call" value="inventoryByProduct" />
 <label for="productId">productId</label>
-<input type="text" name="productId" />
+<input type="text" name="productId" value="OE-PRODUCT1" />
 <button type="submit">RUN</button>
 </form>
 
 <h2>getRepsByPeriod</h2>
-<form method="POST"><input type="hidden" call="getRepsByPeriod" />
+<form method="POST"><input type="hidden" name="call" value="getRepsByPeriod" />
 <label for="quarter">quarter</label>
-<input type="text" name="quarter" />
+<input type="text" name="quarter" value="2017-Q1" />
 <button type="submit">RUN</button>
 </form>
