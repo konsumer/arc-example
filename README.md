@@ -112,11 +112,11 @@ hroe
 
 @indexes
 hroe
-  ap *String
-  as **String
+  gs1p *String
+  gs1s **String
 hroe
-  bp *String
-  bs **String
+  gs2p *String
+  gs2s **String
 
 ```
 
@@ -170,6 +170,9 @@ arc deploy
 # live interact with your schema
 # try typing data.<TAB>
 arc repl
+
+# get a sam.json that describes all your resources
+arc package
 ```
 
 I like to put these commands in [package.json](package.json) `script` definitions, so other devs (who may be less familiar with arc) can quickly do stuff with the project, and it also helps remind me, if I get rusty with arc-commands:

@@ -12,8 +12,8 @@ hroe
 
 @indexes
 hroe
-  ap *String
-  as **String
+  gs1p *String
+  gs1s **String
 hroe
-  bp *String
-  bs **String
+  gs2p *String
+  gs2s **String
