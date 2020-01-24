@@ -1,5 +1,116 @@
 [
   {
-    "pk": ""
+    "gs1p": "EMPLOYEE1",
+    "gs1s": "John Smith",
+    "p": "HR-EMPLOYEE1",
+    "s": "EMPLOYEE1",
+    "StartDate": "",
+    "EndDate": "",
+    "JobID": "",
+    "JobTitle": "",
+    "PhoneNumber": "",
+    "Email": "",
+    "ManagerID":"",
+    "Country": "",
+    "City": "",
+    "Region": "",
+    "Department": ""
+  },
+  {
+    "gs1p": "EMPLOYEE1",
+    "gs1s": "OPEN#2018-08-11",
+    "p": "OE-ORDER1",
+    "s": "EMPLOYEE1",
+    "OrderTotal": 2500
+  },
+  {
+    "gs1p": "PNW",
+    "gs1s": "Pacific Northwest Territory",
+    "p": "HR-REGION1",
+    "s": "PNW",
+    "RegionName": ""
+  },
+  {
+    "gs1p": "PNW",
+    "gs1s": "Building Supplies",
+    "p": "OE-WAREHOUSE1",
+    "s": "PNW",
+    "WarehouseSpec": "",
+    "Location": "",
+    "WHGeoLocation": ""
+  },
+  {
+    "gs1p": "PNW",
+    "gs1s": "Pacific Northwest",
+    "p": "OE-PRODUCT1",
+    "s": "PNW",
+    "TranslatedName": "",
+    "Description": ""
+  },
+  {
+    "gs1p": "CUSTOMER1",
+    "gs1s": "ACE Building Supplies",
+    "p": "OE-CUSTOMER1",
+    "s": "CUSTOMER1",
+    "Address": "",
+    "IncomeLevel": "",
+    "PhoneNumber": "",
+    "NLSLanguage": "",
+    "NLSTerritory": "",
+    "CreditLimit": "",
+    "CustEmail": "",
+    "CustLocation": "",
+    "DateOfBirth": "",
+    "MaritalStatus": "",
+    "Gender": ""
+  },
+  {
+    "gs1p": "CUSTOMER1",
+    "gs1s": "OPEN#2018-08-11",
+    "p": "OE-ORDER1",
+    "s": "CUSTOMER1",
+    "GSI-Bucket": 1,
+    "SalesRepID": "EMPLOYEE1",
+    "AccountManager": "",
+    "OrderMode": "",
+    "OrderTotal": "",
+    "Promotional": ""
+  },
+  {
+    "gs1p": "WA|SEATTLE",
+    "gs1s": "B01|F07|A27|R05",
+    "p": "HR-EMPLOYEE1",
+    "s": "WA|SEATTLE",
+    "EmplyeeName": "John Smith"
+  },
+  {
+    "gs1p": "WA|SEATTLE",
+    "gs1s": "Seattle, Washington",
+    "p": "HR-LOCATION1",
+    "s": "WA|SEATTLE",
+    "CityName": "",
+    "PostalCode": "",
+    "StreetAddress": "",
+    "StateProvince": "",
+    "CountryID": ""
+  },
+  {
+    "gs1p": "J-AM3",
+    "gs1s": "Principal Account Manager",
+    "p": "HR-EMPLOYEE1",
+    "s": "J-AM3",
+    "DepartmentID": "",
+    "StartDate": "",
+    "EndDate": "",
+    "JobID": ""
+  },
+  {
+    "gs1p": "J-AM3",
+    "gs1s": "Principal Account Manager",
+    "p": "HR-JOB1",
+    "s": "J-AM3",
+    "JobTitle": "",
+    "MinSalary": "",
+    "MaxSalary": ""
   }
 ]
