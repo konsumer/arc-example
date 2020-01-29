@@ -69,7 +69,7 @@
     "gs1s": "OPEN#2018-08-11",
     "p": "OE-ORDER1",
     "s": "CUSTOMER1",
-    "GSI-Bucket": 1,
+    "gs2p": "A",
     "SalesRepID": "EMPLOYEE1",
     "AccountManager": "",
     "OrderMode": "",
@@ -112,5 +112,85 @@
     "JobTitle": "",
     "MinSalary": "",
     "MaxSalary": ""
+  },
+  {
+    "gs1p": "PRODUCT1",
+    "gs1s": "OPEN#2018-08-11",
+    "p": "OE-ORDER1",
+    "s": "PRODUCT1",
+    "gs2p": "B",
+    "OrderQuantity": "",
+    "UnitPrice": ""
+  },
+  {
+    "gs1p": "PRODUCT1",
+    "gs1s": "Quickcrete Cement - 50 lb bag",
+    "p": "OE-PRODUCT1",
+    "s": "PRODUCT1",
+    "ProductDescription":"",
+    "WAREHOUSE1": "InventoryQty",
+    "WAREHOUSE2": "InventoryQty",
+    "CategoryID": "",
+    "WeightClass": "",
+    "WarrantyPe": "",
+    "SupplierID":"",
+    "ProductStatus": "",
+    "ListPrice": "",
+    "MinPrice": "",
+    "CatalogURL": ""
+  },
+  {
+    "gs1p": "QUOTA-2017-Q1",
+    "gs1s": "50000",
+    "p": "HR-EMPLOYEE1",
+    "s": "QUOTA-2017-Q1",
+    "EmployeeName": ""
+  },
+  {
+    "gs1p": "HR-CONFIDENTIAL",
+    "gs1s": "2015-11-08",
+    "p": "HR-EMPLOYEE1",
+    "s": "HR-CONFIDENTIAL",
+    "EmployeeName": "",
+    "Salary": "",
+    "CommissionPct": ""
+  },
+  {
+    "gs1p": "JH-AM2",
+    "gs1s": "Senior Account Manager",
+    "p": "HR-EMPLOYEE1",
+    "s": "JH-AM2",
+    "DepartmentID":"",
+    "StartDate": "",
+    "EndDate": "",
+    "JobID": ""
+  },
+  {
+    "gs1p": "JH-AM1",
+    "gs1s": "Account Manager",
+    "p": "HR-EMPLOYEE1",
+    "s": "JH-AM1",
+    "DepartmentID":"",
+    "StartDate": "",
+    "EndDate": "",
+    "JobID": ""
+  },
+  {
+    "gs1p": "USA",
+    "gs1s": "United States",
+    "p": "HR-COUNTRY1",
+    "s": "USA",
+    "CountryName": "",
+    "RegionID": ""
+  },
+  {
+    "gs1p": "COMMERCIAL",
+    "gs1s": "Commercial Sales",
+    "p": "HR-DEPARTMENT1",
+    "s": "COMMERCIAL",
+    "DepartmentName": "",
+    "ManagerID": "EMPLOYEE2",
+    "City": "",
+    "Location": ""
   }
 ]
