@@ -107,20 +107,21 @@ DynamoExample
 
 @tables
 hroe
-  p *String
-  s **String
+  PK *String
+  SK **String
 
 @indexes
 hroe
-  gs1p *String
-  gs1s **String
+  SK *String
+  SearchData **String
 hroe
-  gs2p *String
-  gs2s **String
+  SearchData *String
+hroe
+  GSIBucket *Number
 
 ```
 
-As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* called `p` and *SK* called `s`. We also make 2 GSIs, with their PKs & SKs (named equally unimaginatively.) We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table. I'm not using dashes in any of the actual field-names, because it will confuse dynamo when we make queries.
+As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* and *SK*. We also make 3 GSIs. We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` twice, in `@indexes` (GSI) as they will both be on that table. I'm not using dashes in any of the actual field-names, because it will confuse dynamo when we make queries.
 
 ### make an api
 
