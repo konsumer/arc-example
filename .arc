@@ -13,6 +13,8 @@ hroe
 @indexes
 hroe
   SK *String
-  Data **String
+  SearchData **String
 hroe
-  GSI-Bucket *Number
+  SearchData *String
+hroe
+  GSIBucket *Number

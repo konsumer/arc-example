@@ -8,11 +8,11 @@ const api = new Api()
 const template = readFileSync(`${__dirname}/body.html`).toString()
 
 exports.handler = async function http (req) {
-  const { call, ...q } = arc.http.helpers.bodyParser(req)
-  const out = await api[call].apply(api, Object.values(q))
+  const { call, ...query } = arc.http.helpers.bodyParser(req)
+  const results = await api[call].apply(api, Object.values(query))
 
   return {
     headers: { 'content-type': 'text/html; charset=utf8' },
-    body: template.replace('OUTPUT', JSON.stringify(out, null, 2))
+    body: template.replace('OUTPUT', JSON.stringify({ call, query, results }, null, 2))
   }
 }
