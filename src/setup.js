@@ -3,6 +3,9 @@
 const arc = require('@architect/functions')
 const data = require('./data.json')
 
+// see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html
+const N = 15
+
 const run = async () => {
   const { hroe } = await arc.tables()
   try {
@@ -13,6 +16,7 @@ const run = async () => {
           record[k] = r[k]
         }
       })
+      record['GSI-Bucket'] = Math.floor(Math.random() * N)
       return hroe.put(record)
     }))
     console.log(`put ${data.length} records.`)

@@ -9,36 +9,29 @@ const arc = require('@architect/functions')
 const dateFormat = d => d.toISOString().split('T').shift()
 
 // this makes code more readable to me, below
-// should name keys this, if dashes/underscore end up ok
-const PK = 'p'
-const SK = 's'
-const GSI1 = 'gs1p-gs1s-index'
-const GSI2 = 'gs2p-gs2s-index'
-const GSI1_PK = 'gs1p'
-const GSI1_SK = 'gs1s'
-const GSI2_PK = 'gs2p'
-const GSI2_SK = 'gs2s'
+const GSI1 = 'arc-hroe-example-staging-hroe-SK-Data-index'
+const GSI2 = 'arc-hroe-example-staging-hroe-GSI-Bucket-index'
 
 class Api {
   // Look up Employee Details by Employee ID
-  // PK="EmployeeId"
+  // PK="HR-employeeId"
   async employeeDetailsById (employeeId) {
     const { hroe } = await arc.tables()
     return hroe.query({
-      KeyConditionExpression: `${PK}=:employeeId`,
+      KeyConditionExpression: 'PK=:employeeId',
       ExpressionAttributeValues: {
-        ':employeeId': employeeId
+        ':employeeId': `HR-${employeeId}`
       }
     })
   }
 
   // Query Employee Details by Employee Name
-  // GSI1_PK="EmployeeName"
+  // GSI1_PK="employeeName"
   async employeeDetailsByName (employeeName) {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK}=:employeeName`,
+      KeyConditionExpression: 'SK=:employeeName',
       ExpressionAttributeValues: {
         ':employeeName': employeeName
       }
@@ -46,11 +39,11 @@ class Api {
   }
 
   // Get an employee's current job details only
-  // PK="EmployeeId", SK starts-with "vo"
+  // PK="EmployeeId", SK starts-with "J-"
   async employeeCurrentDetailsById (employeeId) {
     const { hroe } = await arc.tables()
     return hroe.query({
-      KeyConditionExpression: `${PK}=:employeeId AND ${SK} BEGINS_WITH "vo"`,
+      KeyConditionExpression: 'PK=:employeeId AND SK BEGINS_WITH "J-"',
       ExpressionAttributeValues: {
         ':employeeId': employeeId
       }
@@ -63,7 +56,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK}=:customerId AND ${GSI1_SK} BETWEEN :start AND :end`,
+      KeyConditionExpression: 'SK=:customerId AND Data BETWEEN :start AND :end',
       ExpressionAttributeValues: {
         ':customerId': customerId,
         ':start': `${status}#${dateFormat(new Date(start))}`,
@@ -79,7 +72,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI2,
-      KeyConditionExpression: `${GSI2_SK} BETWEEN :start AND :end`,
+      KeyConditionExpression: 'Data BETWEEN :start AND :end',
       ExpressionAttributeValues: {
         ':start': `${status}#${dateFormat(new Date(start))}`,
         ':end': `${status}#${dateFormat(new Date(end))}`
@@ -94,7 +87,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK}="HR-CONFIDENTIAL" AND ${GSI1_SK} > :since`,
+      KeyConditionExpression: 'SK="HR-CONFIDENTIAL" AND Data>:since',
       ExpressionAttributeValues: {
         ':since': dateFormat(new Date(since))
       }
@@ -107,7 +100,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK}=:warehouseId`,
+      KeyConditionExpression: 'SK=:warehouseId',
       ExpressionAttributeValues: {
         ':warehouseId': warehouseId
       }
@@ -120,7 +113,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK}=:productId`,
+      KeyConditionExpression: 'SK=:productId',
       ExpressionAttributeValues: {
         ':productId': productId
       }
@@ -133,7 +126,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK} = :repId`,
+      KeyConditionExpression: 'SK=:repId',
       ExpressionAttributeValues: {
         ':repId': repId
       }
@@ -146,7 +139,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI2,
-      KeyConditionExpression: `${GSI1_PK}=:repId AND ${GSI1_SK} > :date`,
+      KeyConditionExpression: 'SK=:repId AND Data>:date',
       ExpressionAttributeValues: {
         ':date': `${status}#${dateFormat(new Date(date))}`,
         ':repId': repId
@@ -160,7 +153,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK}=:jobTitle`,
+      KeyConditionExpression: 'SK=:jobTitle',
       ExpressionAttributeValues: {
         ':jobTitle': jobTitle
       }
@@ -172,7 +165,7 @@ class Api {
   async inventoryByProductAndWarehouse (productId, warehouseId) {
     const { hroe } = await arc.tables()
     return hroe.query({
-      KeyConditionExpression: `${PK}=:productId AND ${SK}=:warehouseId`,
+      KeyConditionExpression: 'PK=:productId AND SK=:warehouseId',
       ExpressionAttributeValues: {
         ':productId': productId,
         ':warehouseId': warehouseId
@@ -185,7 +178,7 @@ class Api {
   async inventoryByProduct (productId) {
     const { hroe } = await arc.tables()
     return hroe.query({
-      KeyConditionExpression: `${PK}=:oe_productId AND ${SK}=:productId`,
+      KeyConditionExpression: 'PK=:oe_productId AND SK=:productId',
       ExpressionAttributeValues: {
         ':productId': productId,
         ':oe_productId': `OE-${productId}`
@@ -199,7 +192,7 @@ class Api {
     const { hroe } = await arc.tables()
     return hroe.query({
       IndexName: GSI1,
-      KeyConditionExpression: `${GSI1_PK}=:quarter`,
+      KeyConditionExpression: 'SK=:quarter',
       ExpressionAttributeValues: {
         ':quarter': quarter
       },

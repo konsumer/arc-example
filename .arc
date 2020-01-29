@@ -7,13 +7,12 @@ post /
 
 @tables
 hroe
-  p *String
-  s **String
+  PK *String
+  SK **String
 
 @indexes
 hroe
-  gs1p *String
-  gs1s **String
+  SK *String
+  Data **String
 hroe
-  gs2p *String
-  gs2s **String
+  GSI-Bucket *Number
