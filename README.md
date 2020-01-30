@@ -73,7 +73,7 @@ If the access pattern requires a high velocity query on this global secondary in
 
 > You can have a look at [data.json](src/data.json) if you want to see how all this fits together (JSON might be easier to read than all these tables.)
 
-> They didn't mention it in the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html), but we will sometimes need to look things up by GSI2's SK, so I made a reverse-lookup table for that in GSI3.
+> They didn't mention it in the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html), but we will sometimes need to look things up by GSI2's SK, so I made a reverse-lookup index for that in GSI3.
 
 ## implementation
 
