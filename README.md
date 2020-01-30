@@ -129,7 +129,7 @@ It will make your life easier if you create a central file that maps all your ac
 
 Have a look at [this file](src/api.js) to see how I have mapped these to a dynamo client.
 
-Additionally, in your app you will probably need some basic LCRUD (List, Create, Read, Update, Delete) methods for `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Warehouses`, so we can fully manage our data. I left these out, as I made a simple mock-data genenrator (`npm run setup`) and HTML frontend.
+Additionally, in your app you will probably need some basic LCRUD (List, Create, Read, Update, Delete) methods for `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Warehouses`, so we can fully manage our data. I left these out, as I made a simple mock-data generator (`npm run setup`) and HTML frontend.
 
 
 ### make a service & frontend
