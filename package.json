@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "npx @architect/sandbox@RC",
+    "start": "arc sandbox",
     "deploy": "arc deploy",
     "init": "arc init",
     "test": "echo 'NO UNIT-TESTS, YET'",
@@ -13,9 +13,9 @@
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
   "license": "MIT",
   "devDependencies": {
-    "@architect/architect": "^6.1.7"
+    "@architect/architect": "^6.1.8-RC.0"
   },
   "dependencies": {
-    "@architect/functions": "^3.4.14"
+    "@architect/functions": "^3.4.15-RC.0"
   }
 }
