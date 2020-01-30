@@ -145,7 +145,7 @@ get /
 post /
 ```
 
-I just put all the forms in `get /` and the handlers in `post /`. After adding this to [.arc](.arc), you can run `arc init` to create stubs for these in `src/http/`.
+I just put all the forms in `get /` and the handlers in `post /`. In your own app, after adding stuff like this to [.arc](.arc), you can run `arc init` to create stubs for these in `src/http/`.
 
 **TODO**: Make tutorials like this for GraphQL/REST server, with same models & data, but different access patterns and key-structure, tuned to target.
 
