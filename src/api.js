@@ -26,9 +26,12 @@ class Api {
     // make the detail-object look nice
     const item = { PositionPast: [], ID: employeeId, Quotas: [] }
     r.Items.forEach(({ PK, SK, SearchData, GSIBucket, ...record }) => {
+      // load non-index attributes
       Object.keys(record).forEach(k => {
         item[k] = record[k]
       })
+
+      // format index attributes nicely
       if (SK === 'HR-CONFIDENTIAL') {
         item.HireDate = SearchData
       }
