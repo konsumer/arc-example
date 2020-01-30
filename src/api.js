@@ -3,8 +3,6 @@ const arc = require('@architect/functions')
 // This describes the API
 // Since I want a fairly close-mapping with the AWS example I focused on that, even though your data-server might need some other key-structure
 
-// TODO: map outputted items so they have nicely named fields, instead of p/s/gs1p/gs1s/gs2p/gs2s
-
 // util function to convert js date into date-string
 const dateFormat = d => d.toISOString().split('T').shift()
 
