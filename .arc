@@ -15,6 +15,7 @@ hroe
   SK *String
   SearchData **String
 hroe
-  SearchData *String
-hroe
   GSIBucket *Number
+  Status **String
+hroe
+  SearchData *String

@@ -8,8 +8,8 @@ const dateFormat = d => d.toISOString().split('T').shift()
 
 // this makes code more readable to me, below
 const GSI1 = 'SK-SearchData-index'
-const GSI2 = 'SearchData-index'
-const GSI3 = 'GSIBucket-index'
+const GSI2 = 'GSIBucket-index'
+const GSI3 = 'SearchData-index'
 
 class Api {
   // Look up Employee Details by Employee ID
@@ -63,7 +63,7 @@ class Api {
   async employeeDetailsByName (employeeName) {
     const { hroe } = await arc.tables()
     const r = await hroe.query({
-      IndexName: GSI2,
+      IndexName: GSI3,
       KeyConditionExpression: 'SearchData=:employeeName',
       ExpressionAttributeValues: {
         ':employeeName': employeeName
@@ -195,7 +195,7 @@ class Api {
   async ordersByRepAndDate (repId, date = Date.now() - 2.628e+9, status = 'OPEN') {
     const { hroe } = await arc.tables()
     return hroe.query({
-      IndexName: GSI3,
+      IndexName: GSI1,
       KeyConditionExpression: 'SK=:repId AND SearchData>:date',
       ExpressionAttributeValues: {
         ':date': `${status}#${dateFormat(new Date(date))}`,
