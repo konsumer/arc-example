@@ -7,9 +7,7 @@ const data = require('./data.json')
 const N = 15
 
 const run = async () => {
-  const tables = await arc.tables()
-  const { hroe } = tables
-  console.log(await tables.reflect())
+  const { hroe } = await arc.tables()
   try {
     await Promise.all(data.map(r => {
       const record = {}
@@ -18,7 +16,7 @@ const run = async () => {
           record[k] = r[k]
         }
       })
-      record['GSIBucket'] = Math.floor(Math.random() * N)
+      record.GSIBucket = Math.floor(Math.random() * N)
       return hroe.put(record)
     }))
     console.log(`put ${data.length} records.`)

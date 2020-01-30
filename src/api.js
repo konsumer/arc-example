@@ -9,9 +9,9 @@ const arc = require('@architect/functions')
 const dateFormat = d => d.toISOString().split('T').shift()
 
 // this makes code more readable to me, below
-const GSI1 = 'arc-hroe-example-staging-hroe-SK-SearchData-index'
-const GSI2 = 'arc-hroe-example-staging-hroe-SearchData-index'
-const GSI3 = 'arc-hroe-example-staging-hroe-GSIBucket-index'
+const GSI1 = 'SK-SearchData-index'
+const GSI2 = 'SearchData-index'
+const GSI3 = 'GSIBucket-index'
 
 class Api {
   // Look up Employee Details by Employee ID
