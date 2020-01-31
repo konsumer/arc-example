@@ -10,7 +10,7 @@ const dateFormat = d => (new Date(d)).toISOString().split('T').shift()
 
 // names for your indexes, as they are in table
 const GSI1 = 'SK-GSI1_SK-index'
-const GSI2 = 'GSI2_PK-index'
+const GSI2 = 'GSI2_PK-GSI1_SK-index'
 const GSI3 = 'GSI1_SK-index'
 
 // util: first date - Wed Dec 31 1969 16:00:00 GMT-0800
@@ -72,7 +72,7 @@ class Api {
 
   // Query Employee Details by Employee Name
   // GSI1_PK={employeeName}
-  async employeeDetailsByName (employeeName) {
+  async employeeIdByName (employeeName) {
     const { hroe } = await arc.tables()
     const r = await hroe.query({
       IndexName: GSI3,
@@ -82,10 +82,7 @@ class Api {
       }
     })
 
-    return {
-      EmployeeName: employeeName,
-      ID: r.Items[0].SK
-    }
+    return r.Items
   }
 
   // Get an employee's current job details only
@@ -138,6 +135,21 @@ class Api {
   // GSI2_PK=parallell([0...N]), SK.between("{status}-{start}", "{status}-{end}")
   async ordersOpen (start = 0, end = NOW, status = 'OPEN') {
     const { hroe } = await arc.tables()
+    const r = await Promise.all([...new Array(15)].map((v, bucket) => {
+      return hroe.query({
+        IndexName: GSI2,
+        KeyConditionExpression: 'GSI2_PK=:bucket AND GSI1_SK BETWEEN :start AND :end',
+        ExpressionAttributeValues: {
+          ':bucket': bucket,
+          ':start': `${status}#${dateFormat(start)}`,
+          ':end': `${status}#${dateFormat(end)}`
+        }
+      })
+    }))
+    // TODO: this doesn;t seem to work right, also map this into better format
+    return r.reduce((a, c) => {
+      return [...a, ...c.Items]
+    }, [])
   }
 
   // All Employees Hired recently

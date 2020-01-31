@@ -16,6 +16,7 @@ hroe
   GSI1_SK **String  # ParamIndex2
 hroe
   GSI2_PK *Number   # GSIBucket
+  GSI1_SK **String  # copy for searches
 hroe
   GSI1_SK *String   # GSI3_PK
 

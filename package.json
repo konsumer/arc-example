@@ -6,7 +6,7 @@
     "start": "arc sandbox",
     "deploy": "arc deploy",
     "init": "arc init",
-    "setup": "node src/setup.js",
+    "setup": "node src/tools/setup.js",
     "test": "jest"
   },
   "keywords": [],

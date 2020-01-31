@@ -156,7 +156,7 @@ In this example, the items are randomly distributed across the 15 logical partit
 
 If the access pattern requires a high velocity query on this global secondary index that returns a sparse result set, it's probably better to use a hash algorithm to distribute the items rather than a random pattern. In this case, you might select an attribute that is known when the query is executed at run time and hash that attribute into a 0–14 key space when the items are inserted. Then they can be efficiently read from the global secondary index.
 
-> You can have a look at [data.json](src/data.json) if you want to see how all this fits together (JSON might be easier to read than all these tables.)
+> You can have a look at [data.json](src/tools/data.json) if you want to see how all this fits together (JSON might be easier to read than all these tables.)
 
 > They didn't mention it in the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html), but we will sometimes need to look things up by GSI2's SK, so I made a reverse-lookup index for that in GSI3.
 
@@ -169,13 +169,13 @@ Finally, you can revisit the access patterns that were defined earlier. Followin
 | Look up Employee Details by Employee ID                                    | `employeeDetailsById(*employeeID)`                                   | `PK="HR-{employeeID}"`                                                         |
 | Query Employee ID by Employee Name                                         | `employeeIdByName(*employeeName)`                                    | `GSI1_PK={employeeName}`                                                       |
 | Get an employee's current job details only                                 | `employeeCurrentJob(*employeeID)`                                    | `PK="HR-{employeeID}", SK.beginsWith("J")`                                     |
-| Get Orders for a customer for a date range                                 | `ordersByCustomer(*customerID, status="OPEN", start=EPOCH, end=NOW)` | `PK={employeeID}, SK.between("{status}-{start}", "{status}-{end}")`            |
-| Show all Orders in OPEN status for a date range across all customers       | `ordersOpen(start=EPOCH, end=NOW, status="OPEN")`                    | `GSI2_PK=parallell([0...N]), SK.between("{status}-{start}", "{status}-{end}")` |
+| Get Orders for a customer for a date range                                 | `ordersByCustomer(*customerID, status="OPEN", start=EPOCH, end=NOW)` | `PK={employeeID}, SK.between("{status}-{start}", "{status}#{end}")`            |
+| Show all Orders in OPEN status for a date range across all customers       | `ordersOpen(start=EPOCH, end=NOW, status="OPEN")`                    | `GSI2_PK=parallell([0...N]), SK.between("{status}#{start}", "{status}#{end}")` |
 | All Employees Hired recently                                               | `employeesRecent(start=MONTHAGO)`                                    | `GSI1_PK="HR-CONFIDENTIAL", GSI1_SK > {start}`                                 |
 | Find all employees in specific Warehouse                                   | `employeesByWarehouse(*warehouseID)`                                 | `GSI1_PK={warehouseID}`                                                        |
 | Get all Order items for a Product including warehouse location inventories | `ordersByProduct(*productID)`                                        | `GSI1_PK={productID}`                                                          |
 | Get customers by Account Rep                                               | `customerByRep(*employeeID)`                                         | `GSI1_PK={employeeID}`                                                         |
-| Get orders by Account Rep and date                                         | `ordersByRep(*employeeID, status="OPEN", start=EPOCH)`               | `GSI1_PK={employeeID}, GSI1_SK="{status}-{start}"`                             |
+| Get orders by Account Rep and date                                         | `ordersByRep(*employeeID, status="OPEN", start=EPOCH)`               | `GSI1_PK={employeeID}, GSI1_SK="{status}#{start}"`                             |
 | Get all employees with specific Job Title                                  | `employeesByTitle(*title)`                                           | `GSI1_PK="JH-{title}"`                                                         |
 | Get inventory by Product and Warehouse                                     | `inventoryByWarehouse(*productID, *warehouseID)`                     | `PK="OE-{productID}", SK={warehouseID}`                                        |
 | Get total product inventory                                                | `inventory(*productID)`                                              | `PK="OE-{productID}", SK={productID}`                                          |
@@ -280,6 +280,9 @@ npm i
 
 # generate stubs for whatever is defined in .arc, in src/
 npm run init
+
+# setup local mock-data
+npm run setup
 
 # start a local dev-server
 npm start
