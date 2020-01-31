@@ -22,7 +22,7 @@ const NOW = () => new Date()
 // util: a month ago
 const MONTHAGO = () => new Date(Date.now() - 2.628e+9)
 
-// this is organaized a class, but it has no state, so you could organize it as a series of methods-only, if you wanted:
+// this is organaized a class, but it has no state, so you could organize it as a bunch of plain methods, if you wanted
 class Api {
   // Look up Employee Details by Employee ID
   // PK="HR-{employeeID}"
