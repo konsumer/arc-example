@@ -214,12 +214,15 @@ hroe
   GSI1_SK **String  # ParamIndex2
 hroe
   GSI2_PK *Number   # GSIBucket
+  GSI1_SK **String  # copy for searches
 hroe
   GSI1_SK *String   # GSI3_PK
 
 ```
 
 You may notice I am using `hroe` 3 times, in `@indexes` (GSI) as they will be on that table. I'm not using any operators (like pluses or dashes) or [reserved words](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html) in any of the actual field-names, because it will confuse dynamo when we make queries.
+
+I copy `GSI1_SK`, so I can filter things I receive by `GSIBucket`.
 
 ### make a service & frontend
 
