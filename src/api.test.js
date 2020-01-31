@@ -2,7 +2,8 @@
 const sandbox = require('@architect/sandbox')
 const { Api } = require('./api')
 
-// this doesn't work in arc yet. needs to allow quiet param (architect/issues#621) and needs
+// this doesn't work in arc yet. needs to allow quiet param (architect/issues#621) and needs architect/architect/#622 for async
+// for now, just `arc sandbox` before you run the tests
 // beforeAll(() => {
 //   const api = new Api()
 //   return sandbox.start({quiet: true})
