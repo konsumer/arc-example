@@ -27,7 +27,6 @@ class Api {
   // Look up Employee Details by Employee ID
   // PK="HR-{employeeID}"
   async employeeDetailsById (employeeID) {
-    console.log(await arc.tables())
     const { hroe } = await arc.tables()
     const r = await hroe.query({
       KeyConditionExpression: 'PK=:employeeId',
