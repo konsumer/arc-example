@@ -251,8 +251,6 @@ I just put all the forms in `get /` and the handlers in `post /`. In your own ap
 You can also use regular [aws cli tools](https://aws.amazon.com/cli/) to navigate the sandbox-database:
 ```
 aws --endpoint-url=http://localhost:5000 dynamodb list-tables
-aws --endpoint-url=http://localhost:5000 dynamodb delete-table --table-name=hroe-example-staging-hroe
-# etc
 ```
 
 ## finishing up
