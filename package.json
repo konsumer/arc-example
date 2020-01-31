@@ -17,6 +17,6 @@
     "jest": "^25.1.0"
   },
   "dependencies": {
-    "@architect/functions": "^3.4.15-RC.0"
+    "@architect/functions": "^3.5.0"
   }
 }

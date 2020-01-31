@@ -1,0 +1,1 @@
+These are just simple little tools to automate boring things. You won't need to use them, I used them to create docs and example and stuff.

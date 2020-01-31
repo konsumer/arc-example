@@ -4,128 +4,122 @@
 <p>This is a really simplistic example frontend to show off the API we setup.</p>
 <p>They are pre-filled with example-values that should return records.</p>
 
-<h2>employeeDetailsById</h2>
 <form method="POST"><input type="hidden" name="call" value="employeeDetailsById" />
-<label for="employeeId">employeeId</label>
-<input type="text" name="employeeId" value="EMPLOYEE1" />
-<button type="submit">RUN</button>
+  <h2>employeeDetailsById</h2>
+  <p>Look up Employee Details by Employee ID</p>
+  <label for="employeeID">employeeID</label><input type="text" name="employeeID" value="EMPLOYEE1" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>employeeDetailsByName</h2>
-<form method="POST"><input type="hidden" name="call" value="employeeDetailsByName" />
-<label for="employeeName">employeeName</label>
-<input type="text" name="employeeName" value="John Smith" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="employeeIdByName" />
+  <h2>employeeIdByName</h2>
+  <p>Query Employee ID by Employee Name</p>
+  <label for="employeeName">employeeName</label><input type="text" name="employeeName" value="John Smith" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>employeeCurrentDetailsById</h2>
-<form method="POST"><input type="hidden" name="call" value="employeeCurrentDetailsById" />
-<label for="employeeId">employeeId</label>
-<input type="text" name="employeeId" value="EMPLOYEE1" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="employeeCurrentJob" />
+  <h2>employeeCurrentJob</h2>
+  <p>Get an employee's current job details only</p>
+  <label for="employeeID">employeeID</label><input type="text" name="employeeID" value="EMPLOYEE1" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>ordersByCustomerAndDate</h2>
-<form method="POST"><input type="hidden" name="call" value="ordersByCustomerAndDate" />
-<label for="customerId">customerId</label>
-<input type="text" name="customerId" value="CUSTOMER1" />
-<label for="start">start</label>
-<input type="date" name="start" value="1970-01-01" />
-<label for="end">end</label>
-<input type="date" name="end" value="DATENOW" />
-<label for="status">status</label>
-<select name="status">
-  <option>OPEN</option>
-  <option>PENDING</option>
-  <option>CLOSED</option>
-</select>
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="ordersByCustomer" />
+  <h2>ordersByCustomer</h2>
+  <p>Get Orders for a customer for a date range</p>
+  <label for="customerID">customerID</label><input type="text" name="customerID" value="CUSTOMER1" />
+  <label for="status">status</label><select name="status"><option>OPEN</option><option>PENDING</option><option>CLOSED</option></select>
+  <label for="start">start</label><input type="date" name="start" value="EPOCH" />
+  <label for="end">end</label><input type="date" name="end" value="NOW" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>ordersByDate</h2>
-<form method="POST"><input type="hidden" name="call" value="ordersByDate" />
-<label for="start">start</label>
-<input type="date" name="start" value="1970-01-01" />
-<label for="end">end</label>
-<input type="date" name="end" value="DATENOW" />
-<label for="status">status</label>
-<select name="status">
-  <option>OPEN</option>
-  <option>PENDING</option>
-  <option>CLOSED</option>
-</select>
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="ordersOpen" />
+  <h2>ordersOpen</h2>
+  <p>Show all Orders in OPEN status for a date range across all customers</p>
+  <label for="start">start</label><input type="date" name="start" value="EPOCH" />
+  <label for="end">end</label><input type="date" name="end" value="NOW" />
+  <label for="status">status</label><select name="status"><option>OPEN</option><option>PENDING</option><option>CLOSED</option></select>
+  <button type="submit">RUN</button>
 </form>
 
-<h2>employeeRecentHires</h2>
-<form method="POST"><input type="hidden" name="call" value="employeeRecentHires" />
-<label for="since">since</label>
-<input type="date" name="since" value="1970-01-01" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="employeesRecent" />
+  <h2>employeesRecent</h2>
+  <p>All Employees Hired recently</p>
+  <label for="start">start</label><input type="date" name="start" value="MONTHAGO" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>employeesByWarehouse</h2>
+
 <form method="POST"><input type="hidden" name="call" value="employeesByWarehouse" />
-<label for="warehouseId">warehouseId</label>
-<input type="text" name="warehouseId" value="OE-WAREHOUSE1" />
-<button type="submit">RUN</button>
+  <h2>employeesByWarehouse</h2>
+  <p>Find all employees in specific Warehouse</p>
+  <label for="warehouseID">warehouseID</label><input type="text" name="warehouseID" value="WAREHOUSE1" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>ordersByProduct</h2>
+
 <form method="POST"><input type="hidden" name="call" value="ordersByProduct" />
-<label for="productId">productId</label>
-<input type="text" name="productId" value="OE-PRODUCT1" />
-<button type="submit">RUN</button>
+  <h2>ordersByProduct</h2>
+  <p>Get all Order items for a Product including warehouse location inventories</p>
+  <label for="productID">productID</label><input type="text" name="productID" value="PRODUCT1" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>customersByRep</h2>
-<form method="POST"><input type="hidden" name="call" value="customersByRep" />
-<label for="repId">repId</label>
-<input type="text" name="repId" value="EMPLOYEE1" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="customerByRep" />
+  <h2>customerByRep</h2>
+  <p>Get customers by Account Rep</p>
+  <label for="employeeID">employeeID</label><input type="text" name="employeeID" value="EMPLOYEE1" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>ordersByRepAndDate</h2>
-<form method="POST"><input type="hidden" name="call" value="ordersByRepAndDate" />
-<label for="repId">repId</label>
-<input type="text" name="repId" value="EMPLOYEE1" />
-<label for="date">date</label>
-<input type="date" name="date" value="2018-08-11" />
-<label for="status">status</label>
-<select name="status">
-  <option>OPEN</option>
-  <option>PENDING</option>
-  <option>CLOSED</option>
-</select>
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="ordersByRep" />
+  <h2>ordersByRep</h2>
+  <p>Get orders by Account Rep and date</p>
+  <label for="employeeID">employeeID</label><input type="text" name="employeeID" value="EMPLOYEE1" />
+  <label for="status">status</label><select name="status"><option>OPEN</option><option>PENDING</option><option>CLOSED</option></select>
+  <label for="start">start</label><input type="date" name="start" value="EPOCH" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>employeesByJobTitle</h2>
-<form method="POST"><input type="hidden" name="call" value="employeesByJobTitle" />
-<label for="jobTitle">jobTitle</label>
-<input type="text" name="jobTitle" value="Account Manager" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="employeesByTitle" />
+  <h2>employeesByTitle</h2>
+  <p>Get all employees with specific Job Title</p>
+  <label for="title">title</label><input type="text" name="title" value="Principal Account Manager" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>inventoryByProductAndWarehouse</h2>
-<form method="POST"><input type="hidden" name="call" value="inventoryByProductAndWarehouse" />
-<label for="productId">productId</label>
-<input type="text" name="productId" value="OE-PRODUCT1" />
-<label for="warehouseId">warehouseId</label>
-<input type="text" name="warehouseId" value="OE-WAREHOUSE1" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="inventoryByWarehouse" />
+  <h2>inventoryByWarehouse</h2>
+  <p>Get inventory by Product and Warehouse</p>
+  <label for="productID">productID</label><input type="text" name="productID" value="PRODUCT1" />
+  <label for="warehouseID">warehouseID</label><input type="text" name="warehouseID" value="WAREHOUSE1" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>inventoryByProduct</h2>
-<form method="POST"><input type="hidden" name="call" value="inventoryByProduct" />
-<label for="productId">productId</label>
-<input type="text" name="productId" value="OE-PRODUCT1" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="inventory" />
+  <h2>inventory</h2>
+  <p>Get total product inventory</p>
+  <label for="productID">productID</label><input type="text" name="productID" value="PRODUCT1" />
+  <button type="submit">RUN</button>
 </form>
 
-<h2>getRepsByPeriod</h2>
-<form method="POST"><input type="hidden" name="call" value="getRepsByPeriod" />
-<label for="quarter">quarter</label>
-<input type="text" name="quarter" value="2017-Q1" />
-<button type="submit">RUN</button>
+
+<form method="POST"><input type="hidden" name="call" value="accountRepsRankedByTotalAndQuarter" />
+  <h2>accountRepsRankedByTotalAndQuarter</h2>
+  <p>Get Account Reps ranked by Order Total and Sales Period</p>
+  <label for="quarter">quarter</label><input type="text" name="quarter" value="2017-Q1" />
+  <button type="submit">RUN</button>
 </form>
+

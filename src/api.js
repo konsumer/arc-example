@@ -22,37 +22,116 @@ const NOW = () => new Date()
 // util: a month ago
 const MONTHAGO = () => new Date(Date.now() - 2.628e+9)
 
-// this is organaized a class, but it has no state, so you could organize it as a bunch of plain methods, if you wanted
+// this is organaized a class, but it has no state, so you could implement it as a bunch of plain methods, if you wanted
 class Api {
   // Look up Employee Details by Employee ID
   // PK="HR-{employeeID}"
   async employeeDetailsById (employeeID) {
     const { hroe } = await arc.tables()
     const r = await hroe.query({
-      KeyConditionExpression: 'PK=:employeeId',
+      KeyConditionExpression: 'PK=:employeeID',
       ExpressionAttributeValues: {
-        ':employeeId': `HR-${employeeID}`
+        ':employeeID': `HR-${employeeID}`
       }
     })
-    return r
+
+    // make the detail-object look nice
+    const item = { PositionPast: [], ID: employeeID, Quotas: [] }
+    r.Items.forEach(({ PK, SK, GSI1_SK, GSI2_PK, ...record }) => {
+      Object.keys(record).forEach(k => {
+        item[k] = record[k]
+      })
+      if (SK === 'HR-CONFIDENTIAL') {
+        item.HireDate = GSI1_SK
+      }
+      if (SK.startsWith('J-')) {
+        item.PositionCurrent = {
+          ID: SK,
+          Title: GSI1_SK
+        }
+      }
+      if (SK.startsWith('JH-')) {
+        item.PositionPast.push({
+          ID: SK,
+          Title: GSI1_SK
+        })
+      }
+      if (SK.startsWith('QUOTA-')) {
+        item.Quotas.push({
+          Quarter: SK.replace('QUOTA-', ''),
+          Amount: parseFloat(GSI1_SK)
+        })
+      }
+      if (SK.includes('|')) {
+        item.Seat = GSI1_SK
+        item.Region = SK
+      }
+    })
+    return item
   }
 
   // Query Employee Details by Employee Name
   // GSI1_PK={employeeName}
   async employeeDetailsByName (employeeName) {
     const { hroe } = await arc.tables()
+    const r = await hroe.query({
+      IndexName: GSI3,
+      KeyConditionExpression: 'GSI1_SK=:employeeName',
+      ExpressionAttributeValues: {
+        ':employeeName': employeeName
+      }
+    })
+
+    return {
+      EmployeeName: employeeName,
+      ID: r.Items[0].SK
+    }
   }
 
   // Get an employee's current job details only
   // PK="HR-{employeeID}", SK.beginsWith("J")
   async employeeCurrentJob (employeeID) {
     const { hroe } = await arc.tables()
+    const r = await hroe.query({
+      KeyConditionExpression: 'PK=:employeeID AND begins_with(SK, :prefix)',
+      ExpressionAttributeValues: {
+        ':employeeID': `HR-${employeeID}`,
+        ':prefix': 'J-'
+      }
+    })
+
+    return {
+      ID: employeeID,
+      PositionCurrent: {
+        ID: r.Items[0].SK,
+        Title: r.Items[0].GSI1_SK
+      }
+    }
   }
 
   // Get Orders for a customer for a date range
   // PK={employeeID}, SK.between("{status}-{start}", "{status}-{end}")
   async ordersByCustomer (customerID, status = 'OPEN', start = EPOCH, end = NOW()) {
     const { hroe } = await arc.tables()
+    const r = await hroe.query({
+      IndexName: GSI1,
+      KeyConditionExpression: 'SK=:customerID AND GSI1_SK BETWEEN :start AND :end',
+      ExpressionAttributeValues: {
+        ':customerID': customerID,
+        ':start': `${status}#${dateFormat(start)}`,
+        ':end': `${status}#${dateFormat(end)}`
+      }
+    })
+    return r.Items.map(({ PK, SK, GSI1_SK, SalesRepID }) => {
+      const [Status, OrderDate] = GSI1_SK.split('#')
+      return {
+        ID: PK,
+        Customer: SK,
+        SalesRep: SalesRepID,
+        Status,
+        OrderDate
+      }
+    })
   }
 
   // Show all Orders in OPEN status for a date range across all customers
