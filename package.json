@@ -6,14 +6,15 @@
     "start": "arc sandbox",
     "deploy": "arc deploy",
     "init": "arc init",
-    "test": "echo 'NO UNIT-TESTS, YET'",
-    "setup": "node src/setup.js"
+    "setup": "node src/setup.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
   "license": "MIT",
   "devDependencies": {
-    "@architect/architect": "^6.1.8-RC.0"
+    "@architect/architect": "^6.1.8",
+    "jest": "^25.1.0"
   },
   "dependencies": {
     "@architect/functions": "^3.4.15-RC.0"

@@ -3,7 +3,7 @@
 const arc = require('@architect/functions')
 const data = require('./data.json')
 
-// see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html
+// GSI-Bucket count: see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html
 const N = 15
 
 const run = async () => {
@@ -16,7 +16,7 @@ const run = async () => {
           record[k] = r[k]
         }
       })
-      record.GSIBucket = Math.floor(Math.random() * N)
+      record.GSI2_PK = Math.floor(Math.random() * N)
       return hroe.put(record)
     }))
     console.log(`put ${data.length} records.`)

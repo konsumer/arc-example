@@ -1,6 +1,6 @@
 [
   {
-    "SearchData": "John Smith",
+    "GSI1_SK": "John Smith",
     "PK": "HR-EMPLOYEE1",
     "SK": "EMPLOYEE1",
     "StartDate": "",
@@ -16,19 +16,19 @@
     "Department": ""
   },
   {
-    "SearchData": "OPEN#2018-08-11",
+    "GSI1_SK": "OPEN#2018-08-11",
     "PK": "OE-ORDER1",
     "SK": "EMPLOYEE1",
     "OrderTotal": 2500
   },
   {
-    "SearchData": "Pacific Northwest Territory",
+    "GSI1_SK": "Pacific Northwest Territory",
     "PK": "HR-REGION1",
     "SK": "PNW",
     "RegionName": ""
   },
   {
-    "SearchData": "Building Supplies",
+    "GSI1_SK": "Building Supplies",
     "PK": "OE-WAREHOUSE1",
     "SK": "PNW",
     "WarehouseSpec": "",
@@ -36,14 +36,14 @@
     "WHGeoLocation": ""
   },
   {
-    "SearchData": "Pacific Northwest",
+    "GSI1_SK": "Pacific Northwest",
     "PK": "OE-PRODUCT1",
     "SK": "PNW",
     "TranslatedName": "",
     "Description": ""
   },
   {
-    "SearchData": "ACE Building Supplies",
+    "GSI1_SK": "ACE Building Supplies",
     "PK": "OE-CUSTOMER1",
     "SK": "CUSTOMER1",
     "Address": "",
@@ -59,7 +59,7 @@
     "Gender": ""
   },
   {
-    "SearchData": "OPEN#2018-08-11",
+    "GSI1_SK": "OPEN#2018-08-11",
     "PK": "OE-ORDER1",
     "SK": "CUSTOMER1",
     "SalesRepID": "EMPLOYEE1",
@@ -69,13 +69,13 @@
     "Promotional": ""
   },
   {
-    "SearchData": "B01|F07|A27|R05",
+    "GSI1_SK": "B01|F07|A27|R05",
     "PK": "HR-EMPLOYEE1",
     "SK": "WA|SEATTLE",
     "EmployeeName": "John Smith"
   },
   {
-    "SearchData": "Seattle, Washington",
+    "GSI1_SK": "Seattle, Washington",
     "PK": "HR-LOCATION1",
     "SK": "WA|SEATTLE",
     "CityName": "",
@@ -85,7 +85,7 @@
     "CountryID": ""
   },
   {
-    "SearchData": "Principal Account Manager",
+    "GSI1_SK": "Principal Account Manager",
     "PK": "HR-EMPLOYEE1",
     "SK": "J-AM3",
     "DepartmentID": "",
@@ -94,7 +94,7 @@
     "JobID": ""
   },
   {
-    "SearchData": "Principal Account Manager",
+    "GSI1_SK": "Principal Account Manager",
     "PK": "HR-JOB1",
     "SK": "J-AM3",
     "JobTitle": "",
@@ -102,14 +102,14 @@
     "MaxSalary": ""
   },
   {
-    "SearchData": "OPEN#2018-08-11",
+    "GSI1_SK": "OPEN#2018-08-11",
     "PK": "OE-ORDER1",
     "SK": "PRODUCT1",
     "OrderQuantity": "",
     "UnitPrice": ""
   },
   {
-    "SearchData": "Quickcrete Cement - 50 lb bag",
+    "GSI1_SK": "Quickcrete Cement - 50 lb bag",
     "PK": "OE-PRODUCT1",
     "SK": "PRODUCT1",
     "ProductDescription":"",
@@ -125,13 +125,13 @@
     "CatalogURL": ""
   },
   {
-    "SearchData": "50000",
+    "GSI1_SK": "50000",
     "PK": "HR-EMPLOYEE1",
     "SK": "QUOTA-2017-Q1",
     "EmployeeName": ""
   },
   {
-    "SearchData": "2015-11-08",
+    "GSI1_SK": "2015-11-08",
     "PK": "HR-EMPLOYEE1",
     "SK": "HR-CONFIDENTIAL",
     "EmployeeName": "",
@@ -139,7 +139,7 @@
     "CommissionPct": ""
   },
   {
-    "SearchData": "Senior Account Manager",
+    "GSI1_SK": "Senior Account Manager",
     "PK": "HR-EMPLOYEE1",
     "SK": "JH-AM2",
     "DepartmentID":"",
@@ -148,7 +148,7 @@
     "JobID": ""
   },
   {
-    "SearchData": "Account Manager",
+    "GSI1_SK": "Account Manager",
     "PK": "HR-EMPLOYEE1",
     "SK": "JH-AM1",
     "DepartmentID":"",
@@ -157,14 +157,14 @@
     "JobID": ""
   },
   {
-    "SearchData": "United States",
+    "GSI1_SK": "United States",
     "PK": "HR-COUNTRY1",
     "SK": "USA",
     "CountryName": "",
     "RegionID": ""
   },
   {
-    "SearchData": "Commercial Sales",
+    "GSI1_SK": "Commercial Sales",
     "PK": "HR-DEPARTMENT1",
     "SK": "COMMERCIAL",
     "DepartmentName": "",

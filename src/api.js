@@ -3,263 +3,118 @@ const arc = require('@architect/functions')
 // This describes the API
 // Since I want a fairly close-mapping with the AWS example I focused on that, even though your data-server might need some other key-structure
 
-// util function to convert js date into date-string
-const dateFormat = d => d.toISOString().split('T').shift()
+// These make things easier to read & match the docs better
 
-// this makes code more readable to me, below
-const GSI1 = 'SK-SearchData-index'
-const GSI2 = 'GSIBucket-index'
-const GSI3 = 'SearchData-index'
+// util: convert js date into date-string YYYY-MM-DD
+const dateFormat = d => (new Date(d)).toISOString().split('T').shift()
 
+// names for your indexes, as they are in table
+const GSI1 = 'SK-GSI1_SK-index'
+const GSI2 = 'GSI2_PK-index'
+const GSI3 = 'GSI1_SK-index'
+
+// util: first date - Wed Dec 31 1969 16:00:00 GMT-0800
+const EPOCH = new Date(0)
+
+// util: current date
+const NOW = () => new Date()
+
+// util: a month ago
+const MONTHAGO = () => new Date(Date.now() - 2.628e+9)
+
+// this is organaized a class, but it has no state, so you could organize it as a series of methods-only, if you wanted:
 class Api {
   // Look up Employee Details by Employee ID
-  // PK="HR-employeeId"
-  async employeeDetailsById (employeeId) {
+  // PK="HR-{employeeID}"
+  async employeeDetailsById (employeeID) {
+    console.log(await arc.tables())
     const { hroe } = await arc.tables()
     const r = await hroe.query({
       KeyConditionExpression: 'PK=:employeeId',
       ExpressionAttributeValues: {
-        ':employeeId': `HR-${employeeId}`
+        ':employeeId': `HR-${employeeID}`
       }
     })
-
-    // make the detail-object look nice
-    const item = { PositionPast: [], ID: employeeId, Quotas: [] }
-    r.Items.forEach(({ PK, SK, SearchData, GSIBucket, ...record }) => {
-      // load non-index attributes
-      Object.keys(record).forEach(k => {
-        item[k] = record[k]
-      })
-
-      // format index attributes nicely
-      if (SK === 'HR-CONFIDENTIAL') {
-        item.HireDate = SearchData
-      }
-      if (SK.startsWith('J-')) {
-        item.PositionCurrent = {
-          ID: SK,
-          Title: SearchData
-        }
-      }
-      if (SK.startsWith('JH-')) {
-        item.PositionPast.push({
-          ID: SK,
-          Title: SearchData
-        })
-      }
-      if (SK.startsWith('QUOTA-')) {
-        item.Quotas.push({
-          Quarter: SK.replace('QUOTA-', ''),
-          Amount: parseFloat(SearchData)
-        })
-      }
-      if (SK.includes('|')) {
-        item.Seat = SearchData
-        item.Region = SK
-      }
-    })
-    return item
+    return r
   }
 
   // Query Employee Details by Employee Name
-  // GSI1_PK="employeeName"
+  // GSI1_PK={employeeName}
   async employeeDetailsByName (employeeName) {
     const { hroe } = await arc.tables()
-    const r = await hroe.query({
-      IndexName: GSI3,
-      KeyConditionExpression: 'SearchData=:employeeName',
-      ExpressionAttributeValues: {
-        ':employeeName': employeeName
-      }
-    })
-
-    return {
-      EmployeeName: employeeName,
-      ID: r.Items[0].SK
-    }
   }
 
   // Get an employee's current job details only
-  // PK="EmployeeId", SK starts-with "J-"
-  async employeeCurrentDetailsById (employeeId) {
+  // PK="HR-{employeeID}", SK.beginsWith("J")
+  async employeeCurrentJob (employeeID) {
     const { hroe } = await arc.tables()
-    const r = await hroe.query({
-      KeyConditionExpression: 'PK=:employeeId AND begins_with(SK, :prefix)',
-      ExpressionAttributeValues: {
-        ':employeeId': `HR-${employeeId}`,
-        ':prefix': 'J-'
-      }
-    })
-
-    return {
-      ID: employeeId,
-      PositionCurrent: {
-        ID: r.Items[0].SK,
-        Title: r.Items[0].SearchData
-      }
-    }
   }
 
   // Get Orders for a customer for a date range
-  // GSI1_PK="CustomerId", GSI1_SK="status#date"
-  async ordersByCustomerAndDate (customerId, start = 0, end, status = 'OPEN') {
+  // PK={employeeID}, SK.between("{status}-{start}", "{status}-{end}")
+  async ordersByCustomer (customerID, status = 'OPEN', start = EPOCH, end = NOW()) {
     const { hroe } = await arc.tables()
-    const r = await hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK=:customerId AND SearchData BETWEEN :start AND :end',
-      ExpressionAttributeValues: {
-        ':customerId': customerId,
-        ':start': `${status}#${dateFormat(new Date(start))}`,
-        ':end': `${status}#${dateFormat(new Date(end))}`
-      }
-    })
-    return r.Items.map(({ PK, SK, SearchData, SalesRepID }) => {
-      const [Status, OrderDate] = SearchData.split('#')
-      return {
-        ID: PK,
-        Customer: SK,
-        SalesRep: SalesRepID,
-        Status,
-        OrderDate
-      }
-    })
   }
 
   // Show all Orders in OPEN status for a date range across all customers
-  // GSI2_PK=query in parallel for the range [0..N], GSI2_SK between OPEN#start & OPEN#end
-  async ordersByDate (start = 0, end, status = 'OPEN') {
-    // TODO: need to work out "GSI2_PK=query in parallel for the range [0..N]"
+  // GSI2_PK=parallell([0...N]), SK.between("{status}-{start}", "{status}-{end}")
+  async ordersOpen (start = 0, end = NOW, status = 'OPEN') {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SearchData BETWEEN :start AND :end',
-      ExpressionAttributeValues: {
-        ':start': `${status}#${dateFormat(new Date(start))}`,
-        ':end': `${status}#${dateFormat(new Date(end))}`
-      }
-    })
   }
 
   // All Employees Hired recently
-  // GSI1_PK="HR-CONFIDENTIAL", GSI1_SK > since
-  // default is 1 month before today
-  async employeeRecentHires (since = Date.now() - 2.628e+9) {
+  // GSI1_PK="HR-CONFIDENTIAL", GSI1_SK > {start}
+  async employeesRecent (start = MONTHAGO()) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK="HR-CONFIDENTIAL" AND SearchData>:since',
-      ExpressionAttributeValues: {
-        ':since': dateFormat(new Date(since))
-      }
-    })
   }
 
   // Find all employees in specific Warehouse
-  // Use GSI1_PK="wareHouseId"
-  async employeesByWarehouse (warehouseId) {
+  // GSI1_PK={warehouseID}
+  async employeesByWarehouse (warehouseID) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK=:warehouseId',
-      ExpressionAttributeValues: {
-        ':warehouseId': warehouseId
-      }
-    })
   }
 
-  // Get all Orderitems for a Product including warehouse location inventories
-  // Use GSI1_PK="productId"
-  async ordersByProduct (productId) {
+  // Get all Order items for a Product including warehouse location inventories
+  // GSI1_PK={productID}
+  async ordersByProduct (productID) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK=:productId',
-      ExpressionAttributeValues: {
-        ':productId': productId
-      }
-    })
   }
 
   // Get customers by Account Rep
-  // Use GSI1_PK="repId"
-  async customersByRep (repId) {
+  // GSI1_PK={employeeID}
+  async customerByRep (employeeID) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK=:repId',
-      ExpressionAttributeValues: {
-        ':repId': repId
-      }
-    })
   }
 
   // Get orders by Account Rep and date
-  // Use GSI1_PK="repId", GSI1_SK="status#date"
-  async ordersByRepAndDate (repId, date = Date.now() - 2.628e+9, status = 'OPEN') {
+  // GSI1_PK={employeeID}, GSI1_SK="{status}-{start}"
+  async ordersByRep (employeeID, status = 'OPEN', start = EPOCH) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK=:repId AND SearchData>:date',
-      ExpressionAttributeValues: {
-        ':date': `${status}#${dateFormat(new Date(date))}`,
-        ':repId': repId
-      }
-    })
   }
 
   // Get all employees with specific Job Title
-  // Use GSI1_PK=v0O-JOBTITLE
-  async employeesByJobTitle (jobTitle) {
+  // GSI1_PK="JH-{title}"
+  async employeesByTitle (title) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK=:jobTitle',
-      ExpressionAttributeValues: {
-        ':jobTitle': jobTitle
-      }
-    })
   }
 
   // Get inventory by Product and Warehouse
-  // PK="productId", SK="warehouseId"
-  async inventoryByProductAndWarehouse (productId, warehouseId) {
+  // PK="OE-{productID}", SK={warehouseID}
+  async inventoryByWarehouse (productID, warehouseID) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      KeyConditionExpression: 'PK=:productId AND SK=:warehouseId',
-      ExpressionAttributeValues: {
-        ':productId': productId,
-        ':warehouseId': warehouseId
-      }
-    })
   }
 
   // Get total product inventory
-  // PK="OE-productId", SK="productId"
-  async inventoryByProduct (productId) {
+  // PK="OE-{productID}", SK={productID}
+  async inventory (productID) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      KeyConditionExpression: 'PK=:oe_productId AND SK=:productId',
-      ExpressionAttributeValues: {
-        ':productId': productId,
-        ':oe_productId': `OE-${productId}`
-      }
-    })
   }
 
   // Get Account Reps ranked by Order Total and Sales Period
-  // Use GSI1_PK=quarter, scanindexForward=False
-  async getRepsByPeriod (quarter) {
+  // GSI1_PK={quarter}, scanindexForward=False
+  async accountRepsRankedByTotalAndQuarter (quarter) {
     const { hroe } = await arc.tables()
-    return hroe.query({
-      IndexName: GSI1,
-      KeyConditionExpression: 'SK=:quarter',
-      ExpressionAttributeValues: {
-        ':quarter': quarter
-      },
-      ScanIndexForward: false
-    })
   }
 }
 
-exports.Api = Api
-exports.dateFormat = dateFormat
+module.exports = { Api, dateFormat, EPOCH, NOW, MONTHAGO }
