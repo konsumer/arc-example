@@ -1,0 +1,165 @@
+Table Product {
+  Product_ID INT [pk]
+  Product_Name VARCHAR(45)
+  Description TINYTEXT
+  Category INT
+}
+
+Table Customer_Company {
+  Company_ID INT [pk]
+  Company_Name VARCHAR(45)
+  Company_Credit_Limit INT
+  Credit_Limit_Currency VARCHAR(5)
+}
+
+Table Customer_Employee {
+  Customer_Employee_ID INT [pk]
+  Company_ID INT
+  Badge_Number VARCHAR(20)
+  Job_Title VARCHAR(45)
+  Department VARCHAR(45)
+  Credit_Limit INT
+  Credit_Limit_Currency VARCHAR(5)
+}
+
+Table Customer {
+  Customer_ID INT [pk]
+  Person_ID INT
+  Customer_Employee_ID INT
+  AccountMgr_ID INT
+  Income_level INT
+}
+
+Table Inventory {
+  Inventory_ID INT [pk]
+  Product_ID INT
+  Warehouse_ID INT
+  Quantity_on_Hand INT
+  Quantity_Available INT
+}
+
+Table Order_Item {
+  Order_ID INT [pk]
+  Customer_ID INT
+  Product_ID INT
+  Unit_Price DECIMAL
+  Quantity DOUBLE
+}
+
+Table Orders {
+  Order_ID INT [pk]
+  Customer_ID INT
+  Sales_Rep_ID IN
+  Order_Date DATE
+  Order_Code INT
+  Order_Status VARCHAR(15)
+  Order_Total INT
+  Order_Currency VARCHAR(5)
+  Promotion_Code VARCHAR(45)
+}
+
+Table Employment {
+  Employee_ID INT [pk]
+  Person_ID INT
+  HR_Job_ID INT
+  Manager_Employee_ID INT
+  Start_Date DATE
+  End_Date Date
+  Salary INT
+  Commision_Percent DECIMAL
+  Employmentcol VARCHAR
+}
+
+Table Warehouse {
+  Warehouse_ID INT [pk]
+  Location_ID INT
+  Warehouse_Name VARCHAR(45)
+}
+
+Table Phone_Number {
+  Phone_Number_ID INT [pk]
+  Persons_Person_ID INT
+  Locations_Location_ID INT
+  Country_code INT
+  Phone_number INT
+  Phone_Type_ID INT
+}
+
+Table Person {
+  Person_ID INT [pk]
+  First_name VARCHAR(20)
+  Last_name VARCHAR(20)
+  Middle_names VARCHAR(45)
+  Nickname VARCHAR(20)
+  Nat_long_code INT
+  Culture_code INT
+  Gender VARCHAR(12)
+}
+
+Table Restricted_info {
+  Person_ID INT [pk]
+  Date_of_Birth DATE
+  Date_of_Death DATE
+  Government_ID VARCHAR(24)
+  Passport_ID VARCHAR(24)
+  Hire_Date DATE
+  Seniority_Code INT
+}
+
+Table Location {
+  Location_ID INT [pk]
+  Country_ID INT
+  Address_Line_1 VARCHAR(45)
+  Address_Line_2 VARCHAR(45)
+  City VARCHAR(45)
+  State VARCHAR(24)
+  District VARCHAR(24)
+  Postal_code VARCHAR(20)
+  Location_type_code INT
+  Description VARCHAR(128)
+  Shipping_notes VARCHAR(256)
+}
+
+Table Person_Location {
+  Persons_Person_ID INT [pk]
+  Locations_Location_ID INT [pk]
+  Sub_Address VARCHAR(45)
+  Location_Usage VARCHAR(45)
+  Notes TINYTEXT
+}
+
+Table Country {
+  Country_ID INT [pk]
+  Country_Name VARCHAR(24)
+  Country_Code VARCHAR(3)
+  Nat_Lang_Code INT
+  Currency_Code VARCHAR(10)
+}
+
+Table Employment_Jobs {
+  HR_Job_ID INT [pk]
+  Countries_Country_ID INT
+  Job_Title VARCHAR(45)
+  Min_Salary INT
+  Max_Salary INT
+}
+
+Ref:Customer_Company.Company_ID < Customer_Employee.Company_ID
+Ref:Inventory.Product_ID < Product.Product_ID
+Ref:Order_Item.Order_ID < Orders.Order_ID
+Ref:Order_Item.Customer_ID < Customer.Customer_ID
+Ref:Orders.Customer_ID < Customer.Customer_ID
+Ref:Restricted_info.Person_ID < Person.Person_ID
+Ref:Employment.Person_ID < Person.Person_ID
+Ref:Employment_Jobs.HR_Job_ID < Employment.HR_Job_ID
+Ref:Employment_Jobs.Countries_Country_ID < Country.Country_ID
+Ref:Person_Location.Locations_Location_ID < Location.Location_ID
+Ref:Orders.Sales_Rep_ID < Employment.Employee_ID
+Ref:Phone_Number.Persons_Person_ID < Person.Person_ID
+Ref:Product.Product_ID < Order_Item.Product_ID
+Ref:Employment.Manager_Employee_ID < Employment.Employee_ID
+Ref:Location.Location_ID < Warehouse.Location_ID
+Ref:Country.Country_ID < Location.Country_ID
+Ref:Person.Person_ID < Person_Location.Persons_Person_ID
+Ref:Location.Location_ID < Phone_Number.Locations_Location_ID
+Ref: Person.Person_ID < Customer.Person_ID

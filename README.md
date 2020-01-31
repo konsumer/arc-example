@@ -1,8 +1,93 @@
 # Example of Modeling Relational Data in DynamoDB
 
-> This is based on the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html). In this tutorial, I will explain the data structure we start with, and how to map that from their example to [arc](https://arc.codes) using best practices and get the most efficiency & scalability out of DynamoDB.
+This is based on the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html). In this tutorial, I will explain the data structure we start with, and how to map that from their example to [arc](https://arc.codes) using best practices and get the most efficiency & scalability out of DynamoDB.
 
-## how to design a DynamoDB model
+> *TLDR;* just look at [the code](https://github.com/konsumer/arc-example), and it will probably all make sense. If you want to understand how to really dig and get the most out of DynamoDB relational-data & [arc](https://arc.codes), read on.
+
+## Relational Modeling
+
+Traditional relational database management system (RDBMS) platforms store data in a normalized relational structure. This structure reduces hierarchical data structures to a set of common elements that are stored across multiple tables. The following schema is an example of a generic order-entry application with supporting HR schema backing the operational and business support systems of a theoretical manufacturer.
+
+![relational model](./database/schema.png)
+
+> It was helpful to me to actually build this data-structure to see how it fits together, as there were some details missing from the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html). Have a look in [database/](./database) for various SQL model formats, so you can create your own database. You can also look at it as DBML, [here](https://dbdiagram.io/d/5e3337c29e76504e0ef0db37).
+
+RDBMS platforms use an ad hoc query language (generally a flavor of SQL) to generate or materialize views of the normalized data to support application-layer access patterns.
+
+For example, to generate a list of purchase order items sorted by the quantity in stock at all warehouses that can ship each item, you could issue the following query against the preceding schema.
+
+```sql
+SELECT * FROM Orders
+  INNER JOIN Order_Items ON Orders.Order_ID = Order_Items.Order_ID
+  INNER JOIN Products ON Products.Product_ID = Order_Items.Product_ID
+  INNER JOIN Inventories ON Products.Product_ID = Inventories.Product_ID
+  ORDER BY Quantity_on_Hand DESC
+```
+
+One-time queries of this kind provide a flexible API for accessing data, but they require a significant amount of processing. You must often query the data from multiple locations, and the results must be assembled for presentation. The preceding query initiates complex queries across a number of tables and then sorts and integrates the resulting data.
+
+Another factor that can slow down RDBMS systems is the need to support an ACID-compliant transaction framework. The hierarchical data structures used by most online transaction processing (OLTP) applications must be broken down and distributed across multiple logical tables when they are stored in an RDBMS. Therefore, an ACID-compliant transaction framework is necessary to avoid race conditions that could occur if an application tries to read an object that is in the process of being written. Such a transaction framework necessarily adds significant overhead to the write process.
+
+These two factors are the primary barriers to scale for traditional RDBMS platforms. It remains to be seen whether the NewSQL community can be successful in delivering a distributed RDBMS solution. But it is unlikely that even that would resolve the two limitations described earlier. No matter how the solution is delivered, the processing costs of normalization and ACID transactions must remain significant.
+
+For this reason, when your business requires low-latency response to high-traffic queries, taking advantage of a NoSQL system generally makes technical and economic sense. Amazon DynamoDB helps solve the problems that limit relational system scalability by avoiding them.
+
+A relational database system does not scale well for the following reasons:
+
+* It normalizes data and stores it on multiple tables that require multiple queries to write to disk.
+* It generally incurs the performance costs of an ACID-compliant transaction system.
+* It uses expensive joins to reassemble required views of query results.
+
+DynamoDB scales well for these reasons:
+
+* Schema flexibility lets DynamoDB store complex hierarchical data within a single item.
+* Composite key design lets it store related items close together on the same table.
+* Queries against the data store become much simpler, often in the following form:
+
+Queries against the data store become much simpler, often in the following form:
+
+```sql
+SELECT * FROM Table_X WHERE Attribute_Y = "somevalue"
+```
+DynamoDB does far less work to return the requested data compared to the RDBMS in the earlier example.
+
+## First Steps
+
+> NoSQL design, and specifically DynamoDB, requires a different mindset than RDBMS design. For an RDBMS, you can create a normalized data model without thinking about access patterns. You can then extend it later when new questions and query requirements arise. By contrast, in DynamoDB, you shouldn't start designing your schema until you know the questions that it needs to answer. Understanding the business problems and the application use cases up front is absolutely essential.
+
+To start designing a DynamoDB table that will scale efficiently, you must take several steps first to identify the access patterns that are required by the operations and business support systems (OSS/BSS) that it needs to support:
+
+* For new applications, review user stories about activities and objectives. Document the various use cases you identify, and analyze the access patterns that they require.
+* For existing applications, analyze query logs to find out how people are currently using the system and what the key access patterns are.
+
+After completing this process, you should end up with a list that might look something like the following:
+
+| Most Common/Important Access Patterns in Our Organization                  |
+| -------------------------------------------------------------------------- |
+| Look up Employee Details by Employee ID                                    |
+| Query Employee Details by Employee Name                                    |
+| Get an employee's current job details only                                 |
+| Get Orders for a customer for a date range                                 |
+| Show all Orders in OPEN status for a date range across all customers       |
+| All Employees Hired recently                                               |
+| Find all employees in specific Warehouse                                   |
+| Get all Order items for a Product including warehouse location inventories |
+| Get customers by Account Rep                                               |
+| Get orders by Account Rep and date                                         |
+| Get all employees with specific Job Title                                  |
+| Get inventory by Product and Warehouse                                     |
+| Get total product inventory                                                |
+| Get Account Reps ranked by Order Total and Sales Period                    |
+
+In a real application, your list might be much longer. But this collection represents the range of query pattern complexity that you might find in a production environment.
+
+A common approach to DynamoDB schema design is to identify application layer entities and use denormalization and composite key aggregation to reduce query complexity.
+
+In DynamoDB, this means using composite sort keys, overloaded global secondary indexes, partitioned tables/indexes, and other design patterns. You can use these elements to structure the data so that an application can retrieve whatever it needs for a given access pattern using a single query on a table or index. The primary pattern that you can use to model the normalized schema shown in [Relational Modeling](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html) is the adjacency list pattern. Other patterns used in this design can include global secondary index write sharding, global secondary index overloading, composite keys, and materialized aggregations.
+
+> In general, you should maintain as few tables as possible in a DynamoDB application. Most well-designed applications require only one table. Exceptions include cases where high-volume time series data are involved, or datasets that have very different access patterns. A single table with inverted indexes can usually enable simple queries to create and retrieve the complex hierarchical data structures required by your application.
+
+## Example
 
 This example describes how to model relational data in Amazon DynamoDB. A DynamoDB table design corresponds to the relational order entry schema that is shown in [Relational Modeling](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html). It follows the [Adjacency List Design Pattern](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-adjacency-graphs.html#bp-adjacency-lists), which is a common way to represent relational data structures in DynamoDB.
 
@@ -10,16 +95,16 @@ The design pattern requires you to define a set of entity types that usually cor
 
 You define the following entities, which support the relational order entry schema:
 
-1. `HR-Employee` - *PK*: `EmployeeID`, *SK*: `Employee Name`
-1. `HR-Region` - *PK*: `RegionID`, *SK*: `Region Name`
-1. `HR-Country` - *PK*: `CountryId`, *SK*: `Country Name`
-1. `HR-Location` - *PK*: `LocationID`, *SK*: `Country Name`
-1. `HR-Job` - *PK*: `JobID`, *SK*: `Job Title`
-1. `HR-Department` - *PK*: `DepartmentID`, *SK*: `DepartmentID`
-1. `OE-Customer` - *PK*: `CustomerID`, *SK*: `AccountRepID`
-1. `OE-Order` - *PK*: `OrderID`, *SK*: `CustomerID`
-1. `OE-Product` - *PK*: `ProductID`, *SK*: `Product Name`
-1. `OE-Warehouse` - *PK*: `WarehouseID`, *SK*: `Region Name`
+1. `Employee` - *PK*: `EmployeeID`, *SK*: `Employee Name`
+1. `Region` - *PK*: `RegionID`, *SK*: `Region Name`
+1. `Country` - *PK*: `CountryId`, *SK*: `Country Name`
+1. `Location` - *PK*: `LocationID`, *SK*: `Country Name`
+1. `Job` - *PK*: `JobID`, *SK*: `Job Title`
+1. `Department` - *PK*: `DepartmentID`, *SK*: `DepartmentID`
+1. `Customer` - *PK*: `CustomerID`, *SK*: `AccountRepID`
+1. `Order` - *PK*: `OrderID`, *SK*: `CustomerID`
+1. `Product` - *PK*: `ProductID`, *SK*: `Product Name`
+1. `Warehouse` - *PK*: `WarehouseID`, *SK*: `Region Name`
 
 After adding these entity items to the table, you can define the relationships between them by adding edge items to the entity item partitions. The following table demonstrates this step:
 
@@ -73,34 +158,45 @@ If the access pattern requires a high velocity query on this global secondary in
 
 > You can have a look at [data.json](src/data.json) if you want to see how all this fits together (JSON might be easier to read than all these tables.)
 
-> They didn't mention it in the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html), but we will sometimes need to look things up by GSI2's SK, so I made a reverse-lookup index for that in GSI3.
+> They didn't mention it in the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html), but we will sometimes need to look things up by GSI2's SK, so I made a reverse-lookup index for that in GSI3.
 
 ## implementation
 
 Finally, you can revisit the access patterns that were defined earlier. Following is the list of access patterns and the query conditions that you will use with the new DynamoDB version of the application to accommodate them:
 
-| Access Patterns                                                            | Query Conditions                                                            |
-| -------------------------------------------------------------------------- |:---------------------------------------------------------------------------:|
-| Look up Employee Details by Employee ID                                    | Primary Key on table, ID="HR-EMPLOYEE1"                                     |
-| Query Employee Details by Employee Name                                    | Use GSI-1, PK="Employee Name"                                               |
-| Get an employee's current job details only                                 | Primary Key on table, PK="HR-EMPLOYEE1", SK starts-with "vo"                |
-| Get Orders for a customer for a date range                                 | Use GSI-1, PK=CUSTOMERI1, SK="STATUS-DATE", for each StatusCode             |
-| Show all Orders in OPEN status for a date range across all customers       | Use GSI-2, PK=query in parallel for the range [0..N], SK between OPEN-Datel |
-| All Employees Hired recently                                               | Use GSI-1, PK="HR-CONFIDENTIAL", SK > datel                                 |
-| Find all employees in specific Warehouse                                   | Use GSI-1, PKR=WAREHOUSE1                                                   |
-| Get all Order items for a Product including warehouse location inventories | Use GSI-1, PKR=PRODUCT1                                                     |
-| Get customers by Account Rep                                               | Use GSI-1, PKR=ACCOUNT-REP                                                  |
-| Get orders by Account Rep and date                                         | Use GSI-1, PK=ACCOUNT-REP, SK="STATUS-DATE", for each StatusCode            |
-| Get all employees with specific Job Title                                  | Use GSI-1, PK=v0O-JOBTITLE                                                  |
-| Get inventory by Product and Warehouse                                     | Primary Key on table, PK=OE-PRODUCT1, SK=PRODUCT1                           |
-| Get total product inventory                                                | Primary Key on table, PK=OE-PRODUCT1, SK=PRODUCT1                           |
-| Get Account Reps ranked by Order Total and Sales Period                    | Use GSI-1, PK=YYYY-Q1, scanindexForward=False                               |
+| Access Patterns                                                            | API Function                                                         | Query Conditions                                                               |
+| --------------------------------------------------------------------------:|:--------------------------------------------------------------------:|:-------------------------------------------------------------------------------|
+| Look up Employee Details by Employee ID                                    | `employeeDetailsById(*employeeID)`                                   | `PK="HR-{employeeID}"`                                                         |
+| Query Employee ID by Employee Name                                         | `employeeIdByName(*employeeName)`                                    | `GSI1_PK={employeeName}`                                                       |
+| Get an employee's current job details only                                 | `employeeCurrentJob(*employeeID)`                                    | `PK="HR-{employeeID}", SK.beginsWith("J")`                                     |
+| Get Orders for a customer for a date range                                 | `ordersByCustomer(*customerID, status="OPEN", start=EPOCH, end=NOW)` | `PK={employeeID}, SK.between("{status}-{start}", "{status}-{end}")`            |
+| Show all Orders in OPEN status for a date range across all customers       | `ordersOpen(start=0, end=NOW, status="OPEN")`                        | `GSI2_PK=parallell([0...N]), SK.between("{status}-{start}", "{status}-{end}")` |               |
+| All Employees Hired recently                                               | `employeesRecent(start=MONTHAGO)`                                    | `GSI1_PK="HR-CONFIDENTIAL", GSI1_SK > {start}`                                 |
+| Find all employees in specific Warehouse                                   | `employeesByWarehouse(*warehouseID)`                                 | `GSI1_PK={warehouseID}`                                                        |
+| Get all Order items for a Product including warehouse location inventories | `ordersByProduct(*productID)`                                        | `GSI1_PK={productID}`                                                          |
+| Get customers by Account Rep                                               | `customerByRep(*employeeID)`                                         | `GSI1_PK={employeeID}`                                                         |
+| Get orders by Account Rep and date                                         | `ordersByRep(*employeeID, status="OPEN", start=EPOCH)`               | `GSI1_PK={employeeID}, GSI1_SK="{status}-{start}"`                             |
+| Get all employees with specific Job Title                                  | `employeesByTitle(*title)`                                           | `GSI1_PK="JH-{title}"`                                                         |
+| Get inventory by Product and Warehouse                                     | `inventoryByWarehouse(*productID, *warehouseID)`                     | `PK="OE-{productID}", SK={warehouseID}`                                        |
+| Get total product inventory                                                | `inventory(*productID)`                                              | `PK="OE-{productID}", SK={productID}`                                          |
+| Get Account Reps ranked by Order Total and Sales Period                    | `accountRepsRankedByTotalAndQuarter(*quarter)`                       | `GSI1_PK={quarter}, scanindexForward=False`                                    |
 
-> Normally, you should probably do this as a first step. It's much easier to map access patterns to schema, rather than the other way around. Even though DynamoDB is "schemaless" once you have an access strategy for your keys, it's much harder to make a change to how it works, so it really pays to work out all these details up-front. If you know that you will always have a certain number of arguments for all your access patterns, you can work out how many GSI you will need, even if you aren't sure what the schema of the records will be. Following this pattern will help you scale really wall and stay flexible, since you only need to add more GSI if you run out of keys to handle your arguments.
+`SK`s hold data that should be indexed, but isn't the primary partion (`employeeName`, for example, which is a param but not the `employeeID`.) `GSI1_PK` is a reverse-lookup for `SK`, `GSI2_PK` is a partition to spread data evenly (`RND(0...N)`), `GSI3_PK` is a reverse-lookup of `GSI1_SK`.
+
+```
+PK      = Primary Identifier
+SK      = ParamIndex1
+GS1_PK -> SK
+GS1_SK  = ParamIndex2
+GS2_PK  = GSIBucket
+GS3_PK -> GS1_SK
+```
 
 ## mapping this to arc
 
-Here we start where [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html) leaves off, and turn this into a sweet arc-app. Now that we have a model setup, and know what our access patterns will be, let's turn this all into arc definitions & code:
+> I really like to just put this all in code, directly. I make a central file that describes the whole table as functions. Have a look at [this file](src/api.js) to see how I have mapped these to an arc dynamo client. It's pretty much 1-to-1.
+
+Here we start where [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html) leaves off, and turn this into a sweet arc-app. Now that we have a model setup, and know what our access patterns will be, let's turn this all into arc definitions & code:
 
 **[.arc](.arc)**:
 ```
@@ -109,37 +205,29 @@ YOURAPP
 
 @tables
 hroe
-  PK *String
-  SK **String
+  PK *String        # Primary Identifier
+  SK **String       # ParamIndex1
 
 @indexes
 hroe
-  SK *String
-  SearchData **String
+  SK *String        # GSI1_PK
+  GSI1_SK **String  # ParamIndex2
 hroe
-  GSIBucket *Number
-  Status **String
+  GSI2_PK *Number   # GSIBucket
 hroe
-  SearchData *String
+  GSI1_SK *String   # GSI3_PK
 
 ```
 
-As you can see, all the complication is in the access patterns, not the dynamo setup. We have a table called `hroe` with a *PK* and *SK*. We also make 3 GSIs. We do this, because they have multiple duties (they aren't just indexes for a particular field, they are used in multiple ways to index the data), and it will make them match the access pattern text a bit better. You may notice I am using `hroe` 3 times, in `@indexes` (GSI) as they will be on that table. I'm not using extended-chars, operators (like pluses or dashes) or [reserved words](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html) in any of the actual field-names, because it will confuse dynamo when we make queries. This key structure will be used like this: GSI is a reverse-lookup on SK, with an extra field, GSI2 is a reverse-lookup on the extra-data, and GSI3 is a bucket-system to partion records evenly.
-
-### make an api
-
-It will make your life easier if you create a central file that maps all your access patterns to dynamo, so you don't have to worry about it's implementation details while you are working on your app. You can even use this to centralize your single source of truth about how everything maps together (like the table above describes.)
-
-Have a look at [this file](src/api.js) to see how I have mapped these to a dynamo client.
-
-Additionally, in your app you will probably need some basic LCRUD (List, Create, Read, Update, Delete) methods for `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Warehouses`, so we can fully manage our data. I left these out, as I made a simple mock-data generator (`npm run setup`) and HTML frontend.
-
+You may notice I am using `hroe` 3 times, in `@indexes` (GSI) as they will be on that table. I'm not using any operators (like pluses or dashes) or [reserved words](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html) in any of the actual field-names, because it will confuse dynamo when we make queries.
 
 ### make a service & frontend
 
 At this point, you will often setup a REST or GraphQL service or other data-server layer (for your frontend.)  In a real app, you'd want to tune your data-access patterns to how you're going to serve up the data. For example, with REST, it's all about LCRUD for base-types, with params for any search/filtering. For a GraphQL server, you'd focus more on LCRUD for base-types, then type-joins with params to link records, and if needed add some `Query` RPCs. With gRPC, you'll be focused on just the RPCs needed to actually act on the data. In all 3 cases, the way you craft your indexes should be optimized to keep all the similar data togeter, require as few roundtrips as possible, and efficiently pull just the useful stuff for what you are trying to do.
 
-I just whipped up a simple set of forms and post-handlers to quickly expose [the API](src/api.js) to the web, so we can explore it. I wanted to keep this article focused on the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html) and keep things as simple as possible. 
+In your app you will probably need some basic LCRUD (List, Create, Read, Update, Delete) methods for `Employees`, `Regions`, `Countries`, `Locations`, `Jobs`, `Departments`, `Customers`, `Orders`, `Products`, and `Warehouses`, so we can fully manage our data. I left these out, as I made a simple mock-data generator (`npm run setup`) and HTML frontend.
+
+I whipped up a simple set of forms and post-handlers to quickly expose [the API](src/api.js) to the web, so we can explore it. I wanted to keep this article focused on the [AWS example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-relational-modeling.html) and keep things as simple as possible. 
 
 **[.arc](.arc)**:
 ```
@@ -163,7 +251,7 @@ I just put all the forms in `get /` and the handlers in `post /`. In your own ap
 You can also use regular [aws cli tools](https://aws.amazon.com/cli/) to navigate the sandbox-database:
 ```
 aws --endpoint-url=http://localhost:5000 dynamodb list-tables
-aws --endpoint-url=http://localhost:5000 dynamodb delete-table --table-name=arc-hroe-example-staging-hroe
+aws --endpoint-url=http://localhost:5000 dynamodb delete-table --table-name=hroe-example-staging-hroe
 # etc
 ```
 
