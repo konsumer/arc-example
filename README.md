@@ -181,7 +181,7 @@ Finally, you can revisit the access patterns that were defined earlier. Followin
 | Get total product inventory                                                | `inventory(*productID)`                                              | `PK="OE-{productID}", SK={productID}`                                          |
 | Get Account Reps ranked by Order Total and Sales Period                    | `accountRepsRankedByTotalAndQuarter(*quarter)`                       | `GSI1_PK={quarter}, scanindexForward=False`                                    |
 
-`SK`s hold data that should be indexed, but isn't the primary partion (`employeeName`, for example, which is a param but not the `employeeID`.) `GSI1_PK` is a reverse-lookup for `SK`, `GSI2_PK` is a partition to spread data evenly (`RND(0...N)`), `GSI3_PK` is a reverse-lookup of `GSI1_SK`.
+`SK` hold data that should be indexed, but isn't the primary partion (`employeeName`, for example, which is a param but not the `employeeID`.) `GSI1_PK` is a reverse-lookup for `SK`, `GSI2_PK` is a partition to spread data evenly (`RND(0...N)`), `GSI3_PK` is a reverse-lookup of `GSI1_SK`.
 
 ```
 PK      = Primary Identifier
