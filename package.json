@@ -7,14 +7,17 @@
     "deploy": "arc deploy",
     "init": "arc init",
     "setup": "node src/tools/setup.js",
-    "test": "jest"
+    "test": "mocha src/**/*.test.js",
+    "lint": "standard --fix"
   },
   "keywords": [],
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
   "license": "MIT",
   "devDependencies": {
-    "@architect/architect": "^6.1.8",
-    "jest": "^25.1.0"
+    "@architect/sandbox": "1.5.9-RC.2",
+    "expect.js": "^0.3.1",
+    "mocha": "^7.0.1",
+    "standard": "^14.3.1"
   },
   "dependencies": {
     "@architect/functions": "^3.5.0"
