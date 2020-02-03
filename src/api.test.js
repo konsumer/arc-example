@@ -28,72 +28,72 @@ describe('arc-example', () => {
   })
 
   describe('api', () => {
-    it('should look up Employee Details by Employee ID', async () => {
+    it('Look up Employee Details by Employee ID', async () => {
       const r = await api.employeeDetailsById('EMPLOYEE1')
       expect(r).to.be.ok()
     })
 
-    it('should query Employee ID by Employee Name', async () => {
+    it('Query Employee ID by Employee Name', async () => {
       const r = await api.employeeIdByName('John Smith')
       expect(r).to.be.ok()
     })
 
-    it('should get an employee\'s current job details only', async () => {
+    it('Get an employee\'s current job details only', async () => {
       const r = await api.employeeCurrentJob('EMPLOYEE1')
       expect(r).to.be.ok()
     })
 
-    it('should get Orders for a customer for a date range', async () => {
+    it('Get Orders for a customer for a date range', async () => {
       const r = await api.ordersByCustomer('CUSTOMER1')
       expect(r).to.be.ok()
     })
 
-    it('should show all Orders in OPEN status for a date range across all customers', async () => {
+    it('Show all Orders in OPEN status for a date range across all customers', async () => {
       const r = await api.ordersOpen()
       expect(r).to.be.ok()
     })
 
-    it('should all Employees Hired recently', async () => {
+    it('All Employees Hired recently', async () => {
       const r = await api.employeesRecent()
       expect(r).to.be.ok()
     })
 
-    it('should find all employees in specific Warehouse', async () => {
+    it('Find all employees in specific Warehouse', async () => {
       const r = await api.employeesByWarehouse('WAREHOUSE1')
       expect(r).to.be.ok()
     })
 
-    it('should get all Order items for a Product including warehouse location inventories', async () => {
+    it('Get all Order items for a Product including warehouse location inventories', async () => {
       const r = await api.ordersByProduct('PRODUCT1')
       expect(r).to.be.ok()
     })
 
-    it('should get customers by Account Rep', async () => {
+    it('Get customers by Account Rep', async () => {
       const r = await api.customerByRep('EMPLOYEE1')
       expect(r).to.be.ok()
     })
 
-    it('should get orders by Account Rep and date', async () => {
+    it('Get orders by Account Rep and date', async () => {
       const r = await api.ordersByRep('EMPLOYEE1')
       expect(r).to.be.ok()
     })
 
-    it('should get all employees with specific Job Title', async () => {
-      const r = await api.employeesByTitle('J-AM3')
+    it('Get all employees with specific Job Title', async () => {
+      const r = await api.employeesByTitle('Principal Account Manager')
       expect(r).to.be.ok()
     })
 
-    it('should get inventory by Product and Warehouse', async () => {
+    it('Get inventory by Product and Warehouse', async () => {
       const r = await api.inventoryByWarehouse('PRODUCT1', 'WAREHOUSE1')
       expect(r).to.be.ok()
     })
 
-    it('should get total product inventory', async () => {
+    it('Get total product inventory', async () => {
       const r = await api.inventory('PRODUCT1')
       expect(r).to.be.ok()
     })
 
-    it('should get Account Reps ranked by Order Total and Sales Period', async () => {
+    it('Get Account Reps ranked by Order Total and Sales Period', async () => {
       const r = await api.accountRepsRankedByTotalAndQuarter('2017-Q1')
       expect(r).to.be.ok()
     })

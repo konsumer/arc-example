@@ -2,8 +2,6 @@
 
 const { getFunctions } = require('./utils')
 
-const lowerfirst = string => string.charAt(0).toLowerCase() + string.slice(1)
-
 const run = async () => {
   const functions = await getFunctions()
   const out = `/* global describe, it, before, after */
@@ -38,7 +36,7 @@ describe('arc-example', () => {
   describe('api', () => {
     ${functions.map(({ description, func, args, query }) => {
 return `
-    it('should ${lowerfirst(description)}', async () => {
+    it(\`${description}\`, async () => {
       const r = await api.${func}(${args})
       expect(r).to.be.ok()
     })`
