@@ -6,6 +6,19 @@ const data = require('./data.json')
 // GSI-Bucket count: see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html
 const N = 15
 
+const keymap = {
+  Employee: { PK: 'EmployeeID', SK: 'EmployeeName' },
+  Region: { PK: 'RegionID', SK: 'RegionName' },
+  Country: { PK: 'CountryId', SK: 'CountryName' },
+  Location: { PK: 'LocationID', SK: 'CountryName' },
+  Job: { PK: 'JobID', SK: 'JobTitle' },
+  Department: { PK: 'DepartmentID', SK: 'DepartmentID' },
+  Customer: { PK: 'CustomerID', SK: 'AccountRepID' },
+  Order: { PK: 'OrderID', SK: 'CustomerID' },
+  Product: { PK: 'ProductID', SK: 'ProductName' },
+  Warehouse: { PK: 'WarehouseID', SK: 'RegionName' }
+}
+
 const run = async () => {
   const { hroe } = await arc.tables()
   try {

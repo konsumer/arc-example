@@ -82,7 +82,10 @@ class Api {
       }
     })
 
-    return r.Items
+    return {
+      Name: employeeName,
+      ID: r.Items[0].SK
+    }
   }
 
   // Get an employee's current job details only
@@ -107,7 +110,7 @@ class Api {
   }
 
   // Get Orders for a customer for a date range
-  // PK={employeeID}, SK.between("{status}-{start}", "{status}-{end}")
+  // SK={employeeID}, GSI1_SK.between("{status}-{start}", "{status}-{end}")
   async ordersByCustomer (customerID, status = 'OPEN', start = EPOCH, end = NOW()) {
     const { hroe } = await arc.tables()
     const r = await hroe.query({
@@ -132,8 +135,8 @@ class Api {
   }
 
   // Show all Orders in OPEN status for a date range across all customers
-  // GSI2_PK=parallell([0...N]), SK.between("{status}-{start}", "{status}-{end}")
-  async ordersOpen (start = 0, end = NOW, status = 'OPEN') {
+  // GSI2_PK=parallell([0...N]), GSI1_SK.between("{status}-{start}", "{status}-{end}")
+  async ordersByStatus (start = 0, end = NOW, status = 'OPEN') {
     const { hroe } = await arc.tables()
     const r = await Promise.all([...new Array(15)].map((v, bucket) => {
       return hroe.query({
@@ -146,46 +149,93 @@ class Api {
         }
       })
     }))
-    // TODO: this doesn;t seem to work right, also map this into better format
-    return r.reduce((a, c) => {
-      return [...a, ...c.Items]
-    }, [])
+    // TODO: map to nicer structure
+    return r.map(i => i.Items).reduce((a, c) => [...a, ...c], [])
   }
 
   // All Employees Hired recently
-  // GSI1_PK="HR-CONFIDENTIAL", GSI1_SK > {start}
+  // SK="HR-CONFIDENTIAL", GSI1_SK > {start}
   async employeesRecent (start = MONTHAGO()) {
     const { hroe } = await arc.tables()
+    // TODO: not working
+    const r = await hroe.query({
+      IndexName: GSI1,
+      KeyConditionExpression: 'SK=:key AND GSI1_SK > :start',
+      ExpressionAttributeValues: {
+        ':start': dateFormat(start),
+        ':key': 'HR-CONFIDENTIAL'
+      }
+    })
+    return {
+      ID: r.Items[0].PK.replace('HR-', ''),
+      StartDate: r.Items[0].GSI1_SK
+    }
   }
 
   // Find all employees in specific Warehouse
   // GSI1_PK={warehouseID}
   async employeesByWarehouse (warehouseID) {
     const { hroe } = await arc.tables()
+    return hroe.query({
+      IndexName: GSI1,
+      KeyConditionExpression: 'SK=:warehouseID',
+      ExpressionAttributeValues: {
+        ':warehouseID': warehouseID
+      }
+    })
   }
 
   // Get all Order items for a Product including warehouse location inventories
   // GSI1_PK={productID}
   async ordersByProduct (productID) {
     const { hroe } = await arc.tables()
+    return hroe.query({
+      IndexName: GSI1,
+      KeyConditionExpression: 'SK=:productID',
+      ExpressionAttributeValues: {
+        ':productID': productID
+      }
+    })
   }
 
   // Get customers by Account Rep
   // GSI1_PK={employeeID}
   async customerByRep (employeeID) {
     const { hroe } = await arc.tables()
+    return hroe.query({
+      IndexName: GSI1,
+      KeyConditionExpression: 'SK=:employeeID',
+      ExpressionAttributeValues: {
+        ':employeeID': employeeID
+      }
+    })
   }
 
   // Get orders by Account Rep and date
   // GSI1_PK={employeeID}, GSI1_SK="{status}-{start}"
   async ordersByRep (employeeID, status = 'OPEN', start = EPOCH) {
     const { hroe } = await arc.tables()
+    return hroe.query({
+      IndexName: GSI1,
+      KeyConditionExpression: 'SK=:employeeID AND GSI1_SK=:start',
+      ExpressionAttributeValues: {
+        ':employeeID': employeeID,
+        ':start': `${status}#${dateFormat(start)}`
+      }
+    })
   }
 
   // Get all employees with specific Job Title
   // GSI1_PK="JH-{title}"
   async employeesByTitle (title) {
     const { hroe } = await arc.tables()
+    return hroe.query({
+      IndexName: GSI1,
+      KeyConditionExpression: 'SK=:title',
+      ExpressionAttributeValues: {
+        ':title': `JH-${title}`
+      }
+    })
   }
 
   // Get inventory by Product and Warehouse
