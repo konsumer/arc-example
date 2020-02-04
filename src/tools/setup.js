@@ -3,9 +3,8 @@
 const arc = require('@architect/functions')
 const data = require('./data.json')
 
-// GSI-Bucket count: see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html
-const N = 15
-
+// TODO: need to improve the data and put it in easier-to-follow original format then
+// use this mapping to create dynamo records
 const keymap = {
   Employee: { PK: 'EmployeeID', SK: 'EmployeeName' },
   Region: { PK: 'RegionID', SK: 'RegionName' },
@@ -18,6 +17,9 @@ const keymap = {
   Product: { PK: 'ProductID', SK: 'ProductName' },
   Warehouse: { PK: 'WarehouseID', SK: 'RegionName' }
 }
+
+// GSI-Bucket count: see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html
+const N = 15
 
 const run = async () => {
   const { hroe } = await arc.tables()
