@@ -55,7 +55,7 @@ GO
 CREATE TABLE [Orders] (
   [Order_ID] INT PRIMARY KEY,
   [Customer_ID] INT,
-  [Sales_Rep_ID] IN,
+  [Sales_Rep_ID] INT,
   [Order_Date] DATE,
   [Order_Code] INT,
   [Order_Status] VARCHAR(15),
@@ -71,7 +71,7 @@ CREATE TABLE [Employment] (
   [HR_Job_ID] INT,
   [Manager_Employee_ID] INT,
   [Start_Date] DATE,
-  [End_Date] Date,
+  [End_Date] DATE,
   [Salary] INT,
   [Commision_Percent] DECIMAL,
   [Employmentcol] VARCHAR
