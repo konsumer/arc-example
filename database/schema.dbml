@@ -91,7 +91,7 @@ Table Person {
   Last_name VARCHAR(20)
   Middle_names VARCHAR(45)
   Nickname VARCHAR(20)
-  Nat_long_code INT
+  Nat_Lang_Code INT
   Culture_code INT
   Gender VARCHAR(12)
 }
