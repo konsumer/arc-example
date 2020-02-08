@@ -1,5 +1,7 @@
 /* global describe, it, before, after */
 
+// TODO: look into https://volument.com/baretest
+
 const expect = require('expect.js')
 const arc = require('@architect/functions')
 const sandbox = require('@architect/sandbox')
