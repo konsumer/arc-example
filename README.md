@@ -248,7 +248,6 @@ I just put all the forms in `get /` and the handlers in `post /`. In your own ap
 
 * Run `npm i` to install your tools & dependencies
 * Run `npm start` to run a local development-server
-* Run `npm setup` in another terminal to setup your demo-data
 * Open [the demo forms](http://localhost:3333) to explore your data
 
 You can also use regular [aws cli tools](https://aws.amazon.com/cli/) to navigate the sandbox-database:
@@ -283,9 +282,6 @@ npm i
 
 # generate stubs for whatever is defined in .arc, in src/
 npm run init
-
-# setup local mock-data
-npm run setup
 
 # start a local dev-server
 npm start
