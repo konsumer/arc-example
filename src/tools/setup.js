@@ -32,8 +32,9 @@ const recordMap = (table) => {
   if (table === 'Country') {
     return data.Country.map(record => {
       return {
-        PK: 'COUNTRY_' + record.Country_ID,
-        SK: record.Country_Name
+        PK: 'COUNTRY_' + record.Country_Code,
+        SK: record.Country_Name,
+        Currency: record.Currency_Code
       }
     })
   }
@@ -42,10 +43,14 @@ const recordMap = (table) => {
     return data.Location.map(record => {
       // joins
       const country = data.Country.find(r => r.Country_ID === record.Country_ID)
-
       return {
         PK: 'LOCATION_' + record.Location_ID,
-        SK: country.Country_Name
+        SK: country.Country_Code,
+        Address1: record.Address_Line_1,
+        Address2: record.Address_Line_2,
+        City: record.City,
+        State: record.State,
+        Zip: record.Postal_code
       }
     })
   }
@@ -104,7 +109,7 @@ const recordMap = (table) => {
 const N = 15
 
 const run = async () => {
-  const { hroe } = await arc.tables()
+  // const { hroe } = await arc.tables()
   for (const table of ['Employment', 'Region', 'Country', 'Location', 'Job', 'Department', 'Customer', 'Order', 'Product', 'Warehouse']) {
     const records = recordMap(table)
     console.log(records)
