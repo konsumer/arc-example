@@ -6,7 +6,7 @@
     "start": "arc sandbox",
     "deploy": "arc deploy",
     "init": "arc init",
-    "test": "jest",
+    "test": "jest --detectOpenHandles --coverage",
     "lint": "standard --fix"
   },
   "keywords": [],
