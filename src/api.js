@@ -35,6 +35,10 @@ class Api {
       }
     })
 
+    if (!r.Items.length) {
+      return undefined
+    }
+
     // make the detail-object look nice
     const item = { PositionPast: [], ID: employeeID, Quotas: [] }
     r.Items.forEach(({ PK, SK, GSI1_SK, GSI2_PK, ...record }) => {

@@ -109,10 +109,11 @@ const recordMap = (table) => {
 const N = 15
 
 const run = async () => {
+  let records = []
   // const { hroe } = await arc.tables()
   for (const table of ['Employment', 'Region', 'Country', 'Location', 'Job', 'Department', 'Customer', 'Order', 'Product', 'Warehouse']) {
-    const records = recordMap(table)
-    console.log(records)
+    records = [...records, ...recordMap(table)]
   }
+  console.log(records)
 }
 run()
